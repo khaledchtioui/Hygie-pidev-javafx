@@ -1,0 +1,14 @@
+.primary-color {
+    -fx-background-color: #01073f;
+}
+.secondary-color {
+    -fx-background-color: #01072b;
+}
+/* .secondary */
+
+/* Path: src/seance_re/gui/style.css */
+/* Compare this snippet from src/style/style.css: */
+/* .secondary */
+.third-color {
+    -fx-background-color: white;
+}
