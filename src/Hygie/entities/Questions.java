@@ -24,6 +24,10 @@ public class Questions {
         this.quizid = quizid;
     }
 
+    public Questions(int id) {
+        this.id = id;
+    }
+
     public Questions(String question, int type, int point, Questionnaire quizid) {
         this.question = question;
         this.type = type;

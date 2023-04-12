@@ -30,7 +30,7 @@ public class ServiceQuestion implements QuizService<Questions>{
     Connection con ; 
     Statement ste;
      
-    
+
     
     
     
@@ -91,38 +91,105 @@ public class ServiceQuestion implements QuizService<Questions>{
         
 
     }
+public List<Map<String, Object>> getAll2() {
+    List<Map<String, Object>> resultList = new ArrayList<>();
+    try {
+                    ste =con.createStatement();
 
-    public  List<Map<String, Object>> getAll2() {
+        // Exécution de la requête SQL pour récupérer les données de la jointure
+        ResultSet rs = ste.executeQuery("SELECT questionnaire.id AS questionnaire_id, questionnaire.nom AS questionnaire_nom, questionnaire.date AS questionnaire_date, questions.id AS question_id, questions.question AS question_question, questions.type AS question_type, questions.point AS question_point FROM questionnaire JOIN questions ON questionnaire.id = questions.quizid_id");
+        // Parcours du résultat de la requête et stockage dans une liste de Map
+        while (rs.next()) {
+            Map<String, Object> row = new HashMap<>();
+            row.put("questionnaire_id", rs.getInt("questionnaire_id"));
+            row.put("questionnaire_nom", rs.getString("questionnaire_nom"));
+            //row.put("questionnaire_date", rs.getObject("questionnaire_date", LocalDateTime.class));
+            row.put("question_id", rs.getInt("question_id"));
+            row.put("question_question", rs.getString("question_question"));
+            if( rs.getInt("question_type")==1)
+            {
+                           row.put("question_type", "Choix Unique");
+ 
+            }
+            else
+            {
+                           row.put("question_type", "Choix Multuple");
 
-
-
-
-        List<Map<String, Object>> resultList = new ArrayList<>();
-        try {
-
-        ResultSet rs = ste.executeQuery("SELECT questionnaire.id AS questionnaire_id, questionnaire.nom AS questionnaire_nom, questionnaire.date AS questionnaire_date, questions.id AS question_id, questions.question AS question_question, questions.type AS question_type, questions.point AS question_point FROM questionnaire JOIN questions ON questionnaire.id = questions.quizid_id ")  ;
-    while (rs.next()) {
-        Map<String, Object> row = new HashMap<>();
-        row.put("questionnaire_id", rs.getInt("questionnaire_id"));
-        row.put("questionnaire_nom", rs.getString("questionnaire_nom"));
-     // row.put("questionnaire_date", rs.getObject("questionnaire_date", LocalDateTime.class));
-        row.put("question_id", rs.getInt("question_id"));
-        row.put("question_question", rs.getString("question_question"));
-        row.put("question_type", rs.getInt("question_type"));
-        row.put("question_point", rs.getInt("question_point"));
-        resultList.add(row);
-    }
-    
-     } catch (SQLException ex) {
-            System.err.println("errr");
-            System.out.println(ex.getMessage());
+            }
+            row.put("question_point", rs.getInt("question_point"));
+            resultList.add(row);
         }
-        
 
-
-
-return resultList    ;
+        // Fermeture du ResultSet
+        rs.close();
+    } catch (SQLException ex) {
+        // Gestion des exceptions
+        System.err.println("Erreur lors de l'exécution de la requête SQL : " + ex.getMessage());
+        ex.printStackTrace();
+    } finally {
+        // Fermeture de la connexion à la base de données
+        if (ste != null) {
+            try {
+                ste.close();
+            } catch (SQLException ex) {
+                System.err.println("Erreur lors de la fermeture de la connexion : " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        }
     }
+
+    return resultList;
+}
+
+public List<Map<String, Object>> getAllbyquiz(int id) {
+    List<Map<String, Object>> resultList = new ArrayList<>();
+    try {
+                    ste =con.createStatement();
+
+        // Exécution de la requête SQL pour récupérer les données de la jointure
+        ResultSet rs = ste.executeQuery("SELECT questionnaire.id AS questionnaire_id, questionnaire.nom AS questionnaire_nom, questionnaire.date AS questionnaire_date, questions.id AS question_id, questions.question AS question_question, questions.type AS question_type, questions.point AS question_point FROM questionnaire JOIN questions ON questionnaire.id = questions.quizid_id  where  questionnaire.id= " +id);
+        // Parcours du résultat de la requête et stockage dans une liste de Map
+        while (rs.next()) {
+            Map<String, Object> row = new HashMap<>();
+            row.put("questionnaire_id", rs.getInt("questionnaire_id"));
+            row.put("questionnaire_nom", rs.getString("questionnaire_nom"));
+            //row.put("questionnaire_date", rs.getObject("questionnaire_date", LocalDateTime.class));
+            row.put("question_id", rs.getInt("question_id"));
+            row.put("question_question", rs.getString("question_question"));
+            if( rs.getInt("question_type")==1)
+            {
+                           row.put("question_type", "Choix Unique");
+ 
+            }
+            else
+            {
+                           row.put("question_type", "Choix Multuple");
+
+            }
+            row.put("question_point", rs.getInt("question_point"));
+            resultList.add(row);
+        }
+
+        // Fermeture du ResultSet
+        rs.close();
+    } catch (SQLException ex) {
+        // Gestion des exceptions
+        System.err.println("Erreur lors de l'exécution de la requête SQL : " + ex.getMessage());
+        ex.printStackTrace();
+    } finally {
+        // Fermeture de la connexion à la base de données
+        if (ste != null) {
+            try {
+                ste.close();
+            } catch (SQLException ex) {
+                System.err.println("Erreur lors de la fermeture de la connexion : " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    return resultList;
+}
 
     
     

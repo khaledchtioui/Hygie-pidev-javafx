@@ -25,7 +25,7 @@ public class ServiceQuiz implements QuizService<Questionnaire>{
      
     Connection con ; 
     Statement ste;
-     
+
     
     
     
@@ -104,11 +104,13 @@ public class ServiceQuiz implements QuizService<Questionnaire>{
     
             public void modifier(String nom,Questionnaire t) 
             {
-                   String sql = "update Questionnaire set nom=? where id=?";
+                   String sql = "update Questionnaire set nom=? , date=? where id=?";
         try {
             PreparedStatement ste = con.prepareStatement(sql);
             ste.setString(1, nom);
-            ste.setInt(2,t.getId());
+            ste.setString(2, t.getDate().toString());
+
+            ste.setInt(3,t.getId());
             ste.executeUpdate();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());

@@ -48,6 +48,13 @@ public class Questionnaire {
         this.src2 = src2;
     }
 
+    public Questionnaire(LocalDateTime date, String nom) {
+        this.date = date;
+        this.nom = nom;
+    }
+
+   
+
     public LocalDateTime getDate() {
         return date;
     }
@@ -71,6 +78,16 @@ public class Questionnaire {
     @Override
     public String toString() {
         return "Questionnaire{" + "id=" + id + ", date=" + date + ", nom=" + nom + '}';
+    }
+
+    public Questionnaire(int id, String nom) {
+        this.id = id;
+        this.date=LocalDateTime.now()  ;
+        this.nom = nom;
+    }
+
+    public Questionnaire(int id) {
+        this.id = id;
     }
 
    
