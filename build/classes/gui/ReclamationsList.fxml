@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitMenuButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="642.0" prefWidth="1379.0" style="-fx-background-color: linear-gradient(to top right,#1e242e,#ae2d3c);" stylesheets="@../../../../../../Downloads/Template.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.tunmix.gui.FXMLReclamationsList">
+   <children>
+      <Accordion layoutX="88.0" layoutY="156.0" />
+      <TableView fx:id="tableReclamations" layoutX="31.0" layoutY="113.0" onMouseClicked="#getselectedReclamation" prefHeight="350.0" prefWidth="937.0">
+        <columns>
+          <TableColumn fx:id="columnNom" prefWidth="206.0" text="Nom" />
+          <TableColumn fx:id="columnHistorique" prefWidth="207.0" text="Historique" />
+            <TableColumn fx:id="columnEtat" prefWidth="151.0" text="Etat" />
+            <TableColumn fx:id="columnMotif" prefWidth="185.0" text="Motif" />
+            <TableColumn fx:id="columnDate" prefWidth="187.0" text="Date" />
+            <TableColumn fx:id="columnReponse" prefWidth="187.0" text="Reponse" visible="false" />
+        </columns>
+      </TableView>
+      <Button fx:id="showReclamation" layoutX="66.0" layoutY="513.0" mnemonicParsing="false" onAction="#showReclamation" prefHeight="38.0" prefWidth="207.0" style="-fx-background-color: lightgray;" text="Afficher les réclamations" />
+      <SplitMenuButton layoutX="546.0" layoutY="30.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="300.0" style="-fx-border-color: red;" text="Envoyer une réclamation">
+        <items>
+          <MenuItem fx:id="addReclamationProductButton" mnemonicParsing="false" onAction="#ajouterReclamationProduit" text="Sur Produit" />
+          <MenuItem fx:id="addReclamationEventButton" mnemonicParsing="false" onAction="#ajouterReclamationEvent" text="Sur Evenement" />
+        </items>
+      </SplitMenuButton>
+      <TextField fx:id="nomInput" layoutX="1118.0" layoutY="127.0" prefHeight="31.0" prefWidth="200.0" />
+      <Label layoutX="1020.0" layoutY="132.0" text="Nom" textFill="WHITE" />
+      <Button fx:id="deleteReclamationButton" layoutX="476.0" layoutY="513.0" mnemonicParsing="false" onAction="#deleteReclamation" prefHeight="38.0" prefWidth="207.0" style="-fx-background-color: lightgray;" text="Supprimer une réclamation" />
+      <TextField fx:id="historiqueInput" layoutX="1118.0" layoutY="179.0" prefHeight="31.0" prefWidth="200.0" />
+      <Label layoutX="1023.0" layoutY="184.0" text="Historique" textFill="WHITE" />
+      <TextField fx:id="etatInput" layoutX="1118.0" layoutY="230.0" prefHeight="31.0" prefWidth="200.0" />
+      <Label layoutX="1023.0" layoutY="234.0" text="Etat" textFill="WHITE" />
+      <TextField fx:id="motifInput" layoutX="1118.0" layoutY="279.0" prefHeight="31.0" prefWidth="200.0" />
+      <Label layoutX="1023.0" layoutY="283.0" text="Motif" textFill="WHITE" />
+      <Button fx:id="updateReclamationButton" layoutX="1036.0" layoutY="504.0" mnemonicParsing="false" onAction="#updateReclamation" prefHeight="38.0" prefWidth="229.0" style="-fx-background-color: lightgray;" text="Mettre à jour la réclamation" />
+      <Label layoutX="1023.0" layoutY="343.0" text="Reponse" textFill="WHITE" />
+      <TextArea fx:id="reponseInput" layoutX="1117.0" layoutY="332.0" prefHeight="132.0" prefWidth="200.0" />
+   </children>
+</AnchorPane>

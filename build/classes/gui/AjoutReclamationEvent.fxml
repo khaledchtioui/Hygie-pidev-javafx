@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="569.0" prefWidth="666.0" style="-fx-background-color: linear-gradient(to top right,#1e242e,#ae2d3c);" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.tunmix.gui.FXMLAjoutReclamationEvent">
+   <children>
+      <Button fx:id="ajoutReclamationButton" layoutX="199.0" layoutY="431.0" mnemonicParsing="false" onAction="#ajoutReclamationEvent" prefHeight="59.0" prefWidth="309.0" text="Ajouter une réclamation sur un évènement" />
+      <TextField fx:id="nomReclamationInput" layoutX="307.0" layoutY="48.0" />
+      <Label layoutX="187.0" layoutY="52.0" prefHeight="18.0" prefWidth="66.0" text="Nom" textFill="WHITE" />
+      <Label layoutX="187.0" layoutY="233.0" prefHeight="18.0" prefWidth="66.0" text="Motif" textFill="WHITE" />
+      <TextField fx:id="motifInput" layoutX="307.0" layoutY="230.0" />
+      <ComboBox fx:id="comboBox" layoutX="306.0" layoutY="352.0" prefHeight="31.0" prefWidth="187.0" />
+      <Label layoutX="187.0" layoutY="355.0" prefHeight="18.0" prefWidth="66.0" text="Event" textFill="WHITE" />
+      <Label layoutX="187.0" layoutY="113.0" prefHeight="21.0" prefWidth="101.0" text="Historique" textFill="WHITE" />
+      <TextField fx:id="historiqueInput" layoutX="307.0" layoutY="108.0" />
+      <Label layoutX="187.0" layoutY="172.0" prefHeight="18.0" prefWidth="66.0" text="Etat" textFill="WHITE" />
+      <TextField fx:id="etatInput" layoutX="307.0" layoutY="169.0" />
+      <ComboBox fx:id="comboBoxUsers" layoutX="306.0" layoutY="288.0" prefHeight="31.0" prefWidth="187.0" />
+      <Label layoutX="187.0" layoutY="291.0" prefHeight="18.0" prefWidth="66.0" text="User" textFill="WHITE" />
+   </children>
+</AnchorPane>

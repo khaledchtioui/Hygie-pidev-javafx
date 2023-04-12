@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="JavaFXTunmix">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/JavaFXTunmix.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

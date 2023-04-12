@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="642.0" prefWidth="1397.0" style="-fx-background-color: royalblue;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coaching.gui.UserInterfaceController">
+    <children>
+        <Accordion layoutX="88.0" layoutY="156.0" />
+        <TableView fx:id="sujetTableView" layoutX="94.0" layoutY="118.0" onMouseClicked="#getselectedSujet" prefHeight="345.0" prefWidth="578.0">
+            <columns>
+                <TableColumn fx:id="columnTitre" prefWidth="206.0" text="Titre" />
+                <TableColumn fx:id="columnDescription" prefWidth="187.0" text="Description" />
+                <TableColumn fx:id="columnDate" prefWidth="187.0" text="Date" />
+            </columns>
+        </TableView>
+      <Label layoutX="1077.0" layoutY="118.0" text="Contenu" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+      <TextArea fx:id="reponseInput" layoutX="1144.0" layoutY="118.0" prefHeight="132.0" prefWidth="200.0" />
+      <Button fx:id="ajouterReponse" layoutX="1136.0" layoutY="285.0" mnemonicParsing="false" onAction="#ajouterReponse" prefHeight="52.0" prefWidth="210.0" style="-fx-background-color: lightgray;" text="Ajouter Réponse" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Text fill="WHITE" layoutX="283.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Futara;" text="Liste des Sujets" underline="true" wrappingWidth="199.99999999999977">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Text>
+      <Text fill="WHITE" layoutX="776.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Futara;" text="Liste des Réponses" underline="true" wrappingWidth="217.59997558593727">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Text>
+      <Button fx:id="deleteReponsee" layoutX="782.0" layoutY="490.0" mnemonicParsing="false" onAction="#deleteReponsee" prefHeight="52.0" prefWidth="210.0" style="-fx-background-color: lightgray;" text="Supprimer Réponse" />
+      <TableView fx:id="reponseTableView" layoutX="766.0" layoutY="118.0" onMouseClicked="#getselectedReponse" prefHeight="346.0" prefWidth="244.0">
+         <columns>
+            <TableColumn fx:id="columnContenu" prefWidth="243.20001220703125" text="Contenu" />
+         </columns>
+      </TableView>
+    </children>
+</AnchorPane>
