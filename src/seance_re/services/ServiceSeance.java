@@ -4,13 +4,16 @@ import seance_re.Seance_re;
 import seance_re.entities.Seance;
 import seance_re.utilities.MyDB;
 
+import java.awt.*;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.*;
 import java.util.ArrayList;
 
 import java.util.Base64;
+import java.util.List;
 
 public class ServiceSeance implements IService<Seance>{
    Connection con;
@@ -68,6 +71,7 @@ public class ServiceSeance implements IService<Seance>{
             ResultSet rs = pst.executeQuery();
             while (rs.next()){
                 Seance s = new Seance();
+                s.setId(rs.getInt("id"));
                 s.setTitre(rs.getString("titre"));
                 s.setImage(rs.getString("image"));
                 s.setDescription(rs.getString("description"));
@@ -80,11 +84,11 @@ public class ServiceSeance implements IService<Seance>{
         }
         return seances;
     }
-    public void supprimerSeance(Seance seance) throws SQLException {
+    public void supprimerSeance(Seance s) throws SQLException {
         try {
             String query = "DELETE FROM `hygie_app`.`seance` WHERE id=?";
             PreparedStatement statement = con.prepareStatement(query);
-            statement.setInt(1, seance.getId());
+            statement.setInt(1, s.getId());
             statement.executeUpdate();
             System.out.println("Seance deleted successfully.");
         } catch (SQLException e) {
@@ -114,4 +118,54 @@ public class ServiceSeance implements IService<Seance>{
         } catch (SQLException e) {
             System.out.println("Error updating seance: " + e.getMessage());
         }
-    }    }
+    }
+    public void reserveSeance(Seance seance) throws SQLException{
+        try {
+            String query = "INSERT INTO `hygie_app`.`reservation` (seance_id) VALUES (?)";
+            PreparedStatement statement = con.prepareStatement(query);
+            statement.setInt(1, seance.getId());
+            statement.executeUpdate();
+            System.out.println("Seance reservée avec succès !");
+
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+    public List<Seance> afficherSeancesReservees() throws SQLException {
+        List<Seance> seances = new ArrayList<>();
+        try {
+            String query = "SELECT s.* FROM `hygie_app`.`seance` s INNER JOIN `hygie_app`.`reservation` r ON r.seance_id = s.id";
+            PreparedStatement pst = con.prepareStatement(query);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Seance seance = new Seance();
+                seance.setId(rs.getInt("id"));
+                seance.setTitre(rs.getString("titre"));
+                seance.setImage(rs.getString("image"));
+                seance.setDescription(rs.getString("description"));
+                seance.setPrix(rs.getFloat("prix"));
+                seance.setDate(rs.getDate("date"));
+                seances.add(seance); // Add the seance object to the seances list
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+        return seances;
+    }
+    public void supprimerReservation(Seance seance) throws SQLException {
+        try {
+            String query = "DELETE FROM `hygie_app`.`reservation` WHERE seance_id=?";
+            PreparedStatement statement = con.prepareStatement(query);
+            statement.setInt(1, seance.getId());
+            statement.executeUpdate();
+            System.out.println("Reservation deleted successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error deleting reservation: " + e.getMessage());
+        }
+    }
+
+
+}

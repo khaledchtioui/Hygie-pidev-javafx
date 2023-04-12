@@ -9,8 +9,8 @@
    <children>
       <HBox prefHeight="40.0" prefWidth="712.0">
          <children>
-            <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="381.0" text="Reservation" />
-            <Button fx:id="Seance" mnemonicParsing="false" onAction="#Seance" prefHeight="40.0" prefWidth="334.0" text="Seance" />
+            <Button fx:id="Reservation" mnemonicParsing="false" onAction="#Reservation" prefHeight="40.0" prefWidth="381.0" styleClass="tab-button" stylesheets="@button.css" text="Reservation" />
+            <Button fx:id="Seance" mnemonicParsing="false" onAction="#Seance" prefHeight="40.0" prefWidth="334.0" styleClass="tab-button" stylesheets="@button.css" text="Seance" />
          </children>
       </HBox>
       <StackPane fx:id="contentareaS" layoutY="40.0" prefHeight="458.0" prefWidth="712.0" />

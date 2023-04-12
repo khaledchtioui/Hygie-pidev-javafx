@@ -10,27 +10,28 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="458.0" prefWidth="712.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seance_re.gui.Seance1">
    <children>
-      <TextField fx:id="description_seance" layoutX="38.0" layoutY="151.0" prefHeight="78.0" prefWidth="202.0" />
-      <TextField fx:id="prix_seance" layoutX="38.0" layoutY="305.0" prefHeight="26.0" prefWidth="202.0" />
-      <Button layoutX="38.0" layoutY="358.0" mnemonicParsing="false" onAction="#ajouterAction" prefHeight="26.0" prefWidth="132.0" text="Ajouter" />
-      <DatePicker fx:id="date_seance" layoutX="38.0" layoutY="251.0" prefHeight="26.0" prefWidth="202.0" />
-      <TextField fx:id="titre_seance" layoutX="38.0" layoutY="56.0" prefHeight="26.0" prefWidth="202.0" />
-      <Button fx:id="upload" layoutX="38.0" layoutY="101.0" mnemonicParsing="false" onAction="#uploadImage" prefHeight="26.0" prefWidth="202.0" text="upload" />
-      <Button fx:id="supprimer" layoutX="173.0" layoutY="411.0" mnemonicParsing="false" onAction="#supprimer" prefHeight="26.0" prefWidth="132.0" text="supprimer" />
-      <Button fx:id="modifier" layoutX="25.0" layoutY="411.0" mnemonicParsing="false" onAction="#handleBtnModifier" prefHeight="26.0" prefWidth="132.0" text="modifier" />
-      <TableView fx:id="tableView" layoutX="301.0" layoutY="11.0" prefHeight="437.0" prefWidth="397.0">
+      <TextField fx:id="description_seance" layoutX="38.0" layoutY="175.0" prefHeight="78.0" prefWidth="202.0" styleClass="text-field" stylesheets="@textfield.css" />
+      <TextField fx:id="prix_seance" layoutX="38.0" layoutY="350.0" prefHeight="26.0" prefWidth="202.0" stylesheets="@textfield.css" />
+      <Button layoutX="260.0" layoutY="414.0" mnemonicParsing="false" onAction="#ajouterAction" prefHeight="34.0" prefWidth="127.0" stylesheets="@btn.css" text="Ajouter" />
+      <DatePicker fx:id="date_seance" layoutX="38.0" layoutY="285.0" prefHeight="26.0" prefWidth="202.0" styleClass="text-field" stylesheets="@textfield.css" />
+      <TextField fx:id="titre_seance" layoutX="38.0" layoutY="56.0" prefHeight="26.0" prefWidth="202.0" styleClass="text-field" stylesheets="@textfield.css" />
+      <Button fx:id="upload" layoutX="38.0" layoutY="110.0" mnemonicParsing="false" onAction="#uploadImage" prefHeight="26.0" prefWidth="202.0" stylesheets="@btn.css" text="upload" />
+      <Button fx:id="supprimer" layoutX="571.0" layoutY="414.0" mnemonicParsing="false" onAction="#supprimer" prefHeight="34.0" prefWidth="127.0" stylesheets="@btn.css" text="supprimer" />
+      <Button fx:id="modifier" layoutX="416.0" layoutY="414.0" mnemonicParsing="false" onAction="#handleBtnModifier" prefHeight="34.0" prefWidth="127.0" stylesheets="@btn.css" text="modifier" />
+      <TableView fx:id="tableView" layoutX="260.0" layoutY="14.0" prefHeight="392.0" prefWidth="438.0">
          <columns>
             <TableColumn fx:id="titreCol" prefWidth="75.0" text="Titre" />
-            <TableColumn fx:id="descriptionCol" prefWidth="75.0" text="Description" />
-            <TableColumn fx:id="dateCol" prefWidth="75.0" text="Date" />
-            <TableColumn fx:id="prixCol" prefWidth="65.0" text="Prix" />
-            <TableColumn fx:id="imageCol" prefWidth="103.0" text="Image" />
+            <TableColumn fx:id="imageCol" prefWidth="75.0" text="image" />
+            <TableColumn fx:id="descriptionCol" prefWidth="64.0" text="description" />
+            <TableColumn fx:id="prixCol" prefWidth="76.0" text="prix" />
+            <TableColumn fx:id="dateCol" prefWidth="103.0" text="date" />
+            <TableColumn fx:id="idCol" prefWidth="103.0" text="id" />
          </columns>
       </TableView>
-      <Label layoutX="38.0" layoutY="24.0" text="Titre" />
-      <Label layoutX="40.0" layoutY="82.0" text="Image" />
-      <Label layoutX="41.0" layoutY="133.0" text="Description" />
-      <Label layoutX="41.0" layoutY="233.0" text="Date" />
-      <Label layoutX="40.0" layoutY="282.0" text="Prix" />
+      <Label layoutX="37.0" layoutY="36.0" text="Titre" />
+      <Label layoutX="42.0" layoutY="90.0" text="Image" />
+      <Label layoutX="42.0" layoutY="153.0" text="Description" />
+      <Label layoutX="37.0" layoutY="265.0" text="Date" />
+      <Label layoutX="39.0" layoutY="329.0" text="Prix" />
    </children>
 </Pane>

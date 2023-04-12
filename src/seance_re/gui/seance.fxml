@@ -18,11 +18,11 @@
             <AnchorPane prefHeight="49.0" prefWidth="659.0" styleClass="primary-color" stylesheets="@style.css" BorderPane.alignment="CENTER">
                <children>
                   <HBox layoutX="66.0" layoutY="-1.0" prefHeight="50.0" prefWidth="424.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0" />
-                  <Label fx:id="Menu" layoutX="14.0" layoutY="15.0" text="Menu" wrapText="true">
+                  <Label fx:id="Menuback" layoutX="14.0" layoutY="5.0" prefHeight="41.0" prefWidth="119.0" style="-fx-text-fill: white;" text="Hygie" wrapText="true">
                      <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="33.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../media/hamburger.png" />
+                              <Image url="@../media/Hygie%20logo.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -30,17 +30,17 @@
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <Label fx:id="Menuback" layoutX="14.0" layoutY="15.0" style="-fx-text-fill: white;" text="Menu" wrapText="true">
-                     <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../media/hamburger.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
+                  <Label fx:id="Menu" layoutX="14.0" layoutY="5.0" prefHeight="41.0" prefWidth="119.0" style="-fx-text-fill: white;" text="Hygie" wrapText="true">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
+                     <graphic>
+                        <ImageView fitHeight="33.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../media/Hygie%20logo.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                   </Label>
                </children>
             </AnchorPane>

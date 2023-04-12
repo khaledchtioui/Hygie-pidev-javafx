@@ -10,7 +10,9 @@ public class Seance {
     String description;
     float prix;
     Date date;
-    public Seance(){};
+    public Seance() {
+        // Default constructor
+    }
     public Seance(int id, String titre, String image, String description, float prix, Date date) {
         this.id = id;
         this.titre = titre;

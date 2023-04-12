@@ -1,44 +1,40 @@
 package seance_re.gui;
-import com.sun.glass.ui.CommonDialogs;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import seance_re.entities.Seance;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.Paths;
+import java.util.function.UnaryOperator;
+
+
 import java.sql.Date;
 import java.util.*;
 import java.time.LocalDate;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.control.TextFormatter.Change;
 import javafx.fxml.Initializable;
 import seance_re.services.ServiceSeance;
-import sun.util.resources.LocaleData;
 
-import javax.swing.*;
 import javafx.scene.image.ImageView;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.io.File;
-import java.io.FileInputStream;
+
 import java.sql.*;
 import javafx.stage.FileChooser.ExtensionFilter;
 
-import java.net.URL;
+
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
 public class Seance1 implements Initializable{
     @FXML
@@ -67,6 +63,8 @@ public class Seance1 implements Initializable{
     private TableColumn<Seance, Double> prixCol;
     @FXML
     private TableColumn<Seance, Date> dateCol;
+    @FXML
+    private TableColumn<Seance, String>  idCol;
     private ObservableList<Seance> observableList;
     private ServiceSeance ServiceSeance;
     private Seance selectedSeance;
@@ -74,19 +72,65 @@ public class Seance1 implements Initializable{
     Button supprimer;
     @FXML
     Button modifier;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        date_seance.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+                setDisable(empty || date.compareTo(today) < 0 );
+            }
+        });
+
+        titre_seance.textProperty().addListener((observable, oldValue, newValue) -> {
+            // Vérifier si la nouvelle valeur ne contient que des lettres alphabétiques
+            if (!newValue.matches("^[a-zA-Z ]*$")) {
+                // Si la nouvelle valeur contient autre chose que des lettres, la remplacer par l'ancienne valeur
+                titre_seance.setText(oldValue);
+            }
+        });
+        Pattern pattern = Pattern.compile("\\d*\\.?\\d*");
+
+        // Create a filter that only allows float values
+        UnaryOperator<Change> filter = change -> {
+            String newText = change.getControlNewText();
+            if (pattern.matcher(newText).matches()) {
+                try {
+                    float value = Float.parseFloat(newText);
+                    if (value >= 0) {
+                        return change;
+                    }
+                } catch (NumberFormatException e) {
+                    // Value is not a valid float, do nothing
+                }
+            }
+            return null;
+        };
+
+        // Create a text formatter with the filter
+        TextFormatter<String> formatter = new TextFormatter<>(filter);
+
+        // Set the text formatter to the text field
+        prix_seance.setTextFormatter(formatter);
+        tableView.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+
         observableList = FXCollections.observableArrayList();
         ServiceSeance = new ServiceSeance();
-
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         titreCol.setCellValueFactory(new PropertyValueFactory<>("titre"));
         descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         prixCol.setCellValueFactory(new PropertyValueFactory<>("prix"));
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
-        imageCol.setCellValueFactory(new PropertyValueFactory<>("imageData"));
+        imageCol.setCellValueFactory(new PropertyValueFactory<>("image"));
+
 
         tableView.setItems(observableList);
         loadData();
+
+
+
+
 
        date_seance.setValue(LocalDate.now());
         supprimer.disableProperty().bind(Bindings.isEmpty(tableView.getSelectionModel().getSelectedItems()));
@@ -98,7 +142,43 @@ public class Seance1 implements Initializable{
                 prix_seance.setText(Float.toString(selectedSeance.getPrix()));
             }
         });
+        TableColumn<Seance, Void> reservationColumn = new TableColumn<>("Reservation");
 
+
+// Add the reservation column to the table view
+// Create a cell factory for the reservation column
+        reservationColumn.setCellFactory(column -> new TableCell<Seance, Void>() {
+            private final Button reservationButton = new Button("Reserve");
+
+            // Set the button action when it is clicked
+            {
+                reservationButton.setOnAction(e -> {
+                    Seance seanceSelectionnee = getTableView().getSelectionModel().getSelectedItem();
+                    if(seanceSelectionnee != null) {
+                        try {
+                            ServiceSeance.reserveSeance(seanceSelectionnee);
+                            // Actualiser la table des réservations ici
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
+
+            }
+
+            // Render the cell with the reservation button
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(reservationButton);
+                }
+            }
+        });
+        tableView.getColumns().add(reservationColumn);
 
         // TODO
     }
@@ -119,7 +199,7 @@ public class Seance1 implements Initializable{
         sp.setSelectedFile(filePath);
     }
         @FXML
-    private void ajouterAction(ActionEvent event) {
+    private void ajouterAction() {
             if (selectedFile == null) {
                 System.out.println("Please select a file!");
                 return;
@@ -127,15 +207,20 @@ public class Seance1 implements Initializable{
         LocalDate  dateString = date_seance.getValue();
         System.out.println("Selected date: " + dateString);
 
-            ServiceSeance sp = new ServiceSeance();
-            String filePath;
-            filePath = selectedFile.toString();
-            sp.setSelectedFile(filePath);
-            String imageData = sp.getImageData(selectedFile);
-
-            Seance p = new Seance(titre_seance.getText(), imageData , description_seance.getText(), Float.parseFloat(prix_seance.getText()), Date.valueOf(dateString));
-
-        sp.Ajouter(p);
+    ServiceSeance sp = new ServiceSeance();
+    String filePath;
+    filePath = selectedFile.toString();
+    sp.setSelectedFile(filePath);
+    String imageData = sp.getImageData(selectedFile);
+            try {
+    Seance p = new Seance(titre_seance.getText(), imageData, description_seance.getText(), Float.parseFloat(prix_seance.getText()), Date.valueOf(dateString));
+                sp.Ajouter(p);
+                loadData();
+            } catch (NumberFormatException e) {
+                // Show an error message if the price value is not a valid float
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid price value!");
+                alert.showAndWait();
+            }
 
 
         }
@@ -146,8 +231,13 @@ public class Seance1 implements Initializable{
         observableList.addAll(seances);
         tableView.refresh();
     }
+
+
+
+
+
     @FXML
-    private void supprimer(ActionEvent event) {
+    private void supprimer() {
         Seance seanceASupprimer = tableView.getSelectionModel().getSelectedItem();
         if (seanceASupprimer == null) {
             return;
@@ -160,18 +250,21 @@ public class Seance1 implements Initializable{
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-
-try {
-
-
-    // Remove seance from the TableView and the database
-    ServiceSeance.supprimerSeance(seanceASupprimer);
-    observableList.remove(seanceASupprimer);
-    tableView.refresh();
-} catch (SQLException e) {
-    e.printStackTrace();
-}
-
+            try {
+                // Check if the Seance object has a valid id
+                if (seanceASupprimer.getId() == 0) {
+                    System.out.println("Error deleting seance: invalid id");
+                    return;
+                }
+                // Remove seance from the TableView and the database
+                ServiceSeance.supprimerSeance(seanceASupprimer);
+                observableList.remove(seanceASupprimer);
+                tableView.refresh();
+                System.out.println("Seance deleted successfully.");
+            } catch (SQLException e) {
+                System.out.println("Error deleting seance: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
     private void clearInputs() {
@@ -183,7 +276,7 @@ try {
     }
     @FXML
 
-    private void handleBtnModifier(ActionEvent event) {
+    private void handleBtnModifier() {
         if (selectedSeance == null) {
             return;
         }
@@ -202,6 +295,7 @@ try {
         seanceModifiee.setId(selectedSeance.getId());
 
         try {
+
             ServiceSeance.modifierSeance(seanceModifiee);
             observableList.remove(selectedSeance);
             observableList.add(seanceModifiee);
@@ -210,5 +304,7 @@ try {
             e.printStackTrace();
         }
     }
+
+
 
 }
