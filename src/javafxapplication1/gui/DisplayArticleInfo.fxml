@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Button?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="javafxapplication1.gui.DisplayArticleInfoController">
+   <children>
+      <Label layoutX="50.0" layoutY="30.0" text="Title:" />
+      <Label layoutX="50.0" layoutY="60.0" text="Category:" />
+      <Label layoutX="50.0" layoutY="90.0" text="Description:" />
+      <Label layoutX="50.0" layoutY="120.0" text="Date of Creation:" />
+      <Label layoutX="50.0" layoutY="150.0" text="Image:" />
+      <Label layoutX="50.0" layoutY="190.0" text="Related Commentaires :" />
+      <TableView fx:id="Commentaires" layoutX="50.0" layoutY="220.0" prefHeight="400.0" prefWidth="1100.0">
+         <columns>
+            <TableColumn fx:id="CommentairesColContenue" prefWidth="800.0" text="Desc" />
+            <TableColumn fx:id="CommentairesColDateCreation" prefWidth="200.0" text="Date Creation" />
+            <TableColumn fx:id="CommentairesColDelete" prefWidth="100.0" text="Delete" style="-fx-background-color: red;"  />
+         </columns>
+      </TableView>
+      <Label fx:id="lblTitle" layoutX="200.0" layoutY="30.0" />
+      <Label fx:id="lblCategory" layoutX="200.0" layoutY="60.0" />
+      <Label fx:id="lblDescription" layoutX="200.0" layoutY="90.0" prefWidth="1000.0" wrapText="true" />
+      <Label fx:id="lblDateCreation" layoutX="200.0" layoutY="120.0" />
+      <Label fx:id="lblImage" layoutX="200.0" layoutY="150.0" />
+      
+      <!-- Refresh Button -->
+      <Button layoutX="1100.0" layoutY="25.0" minWidth="100" minHeight="40" text="Refresh" onAction="#AfficherCom" textFill="#0064ff" />
+
+        <!-- Refresh Button -->
+        <Button layoutX="1100.0" layoutY="70.0" minWidth="100" minHeight="40" text="Ajout Com" onAction="#ouvrirAjouterCommentaire" textFill="#40a341" />
+        
+        
+   </children>
+</AnchorPane>

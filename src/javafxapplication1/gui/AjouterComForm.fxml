@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxapplication1.gui.AjouterComFormController">
+    <children>
+        <Label layoutX="25.0" layoutY="30.0" prefHeight="17.0" prefWidth="53.0" text="Contenue:" />
+        <TextField fx:id="contenue" layoutX="100.0" layoutY="25.0" prefWidth="350.0" promptText="Entrez le contenu" />
+        <Button layoutX="100.0" layoutY="75.0" mnemonicParsing="false" onAction="#ajouterAction" text="Ajouter Commentaire" />
+        <Label fx:id="Listabel" layoutX="257.0" layoutY="50.0" prefHeight="101.0" prefWidth="189.0" />
+    </children>
+</AnchorPane>
+
