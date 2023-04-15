@@ -8,6 +8,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.scene.layout.VBox;
+import javafx.geometry.Pos;
+
+
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -68,6 +73,8 @@ public class HelloController {
 
    @FXML
    private TextField emailTextField2;
+   @FXML
+   private TextField emailTextField21;
 
    @FXML
    private TextField usernameTextField2;
@@ -84,7 +91,7 @@ public class HelloController {
    private PreparedStatement prepare;
    private ResultSet result;
    private String roles = "ROLE_USER";
-   private String isVerified = "yes";
+   private String isVerified = "1";
 
 
 
@@ -97,55 +104,100 @@ public class HelloController {
 
    public void loginAccount() {
 
-      String sql = "SELECT email,password FROM user WHERE email=? AND password=?";
-      database database=new database();
+      String sql = "SELECT email,password,roles,address,cin,fullname,description,image,specialite,cv FROM user WHERE email=? AND password=?";
+      String email = emailTextField2.getText();
+      String password = passwordPasswordField.getText();
+
+      database database = new database();
       database.connect();
+
       try {
          Alert alert;
-         if (emailTextField2.getText().isEmpty() || passwordPasswordField.getText().isEmpty()) {
+         if (email.isEmpty() || password.isEmpty()) {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error message");
             alert.setHeaderText(null);
             alert.setContentText("Please fill all blank field");
             alert.showAndWait();
-         }else {
+         } else {
             prepare = con.prepareStatement(sql);
-            prepare.setString(1, emailTextField2.getText());
-            prepare.setString(2, passwordPasswordField.getText());
+            prepare.setString(1, email);
+            prepare.setString(2, password);
 
             result = prepare.executeQuery();
 
             if (result.next()) {
-
-               alert = new Alert(Alert.AlertType.INFORMATION);
-               alert.setTitle("information message");
-               alert.setHeaderText(null);
-               alert.setContentText("successfully login");
-               alert.showAndWait();
-
-               loginButton.getScene().getWindow().hide();
-
-               Parent root = FXMLLoader.load(getClass().getResource("DashAdmin.fxml"));
-               Stage stage=new Stage();
-               Scene scene=new Scene(root);
-               stage.setScene(scene);
-               stage.setTitle("Hygie Dashboard Admin ");
-               stage.show();
+               UserData.email = result.getString("email");
+               UserData.fullname=result.getString("fullname");
+               UserData.address=result.getString("address");
+               UserData.cin=result.getString("cin");
+               UserData.description=result.getString("description");
+               UserData.image=result.getString("image");
+               UserData.specialite=result.getString("specialite");
 
 
-            }
-            else{
 
+
+               String roles = result.getString("roles");
+               if (roles.equals("ROLE_USER")) {
+                  alert = new Alert(Alert.AlertType.INFORMATION);
+                  alert.setTitle("information message");
+                  alert.setHeaderText(null);
+                  alert.setContentText("successfully login as user");
+                  alert.showAndWait();
+
+                  loginButton.getScene().getWindow().hide();
+
+                  Parent root = FXMLLoader.load(getClass().getResource("DashUser.fxml"));
+                  Stage stage=new Stage();
+                  Scene scene=new Scene(root);
+                  stage.setScene(scene);
+                  stage.setTitle("Hygie Dashboard User");
+                  stage.show();
+
+               } else if (roles.equals("ROLE_COACH")) {
+                  alert = new Alert(Alert.AlertType.INFORMATION);
+                  alert.setTitle("information message");
+                  alert.setHeaderText(null);
+                  alert.setContentText("successfully login as coach");
+                  alert.showAndWait();
+
+                  loginButton.getScene().getWindow().hide();
+
+                  Parent root = FXMLLoader.load(getClass().getResource("DashCoach.fxml"));
+                  Stage stage=new Stage();
+                  Scene scene=new Scene(root);
+                  stage.setScene(scene);
+                  stage.setTitle("Hygie Dashboard Coach");
+                  stage.show();
+
+               } else if (roles.equals("ROLE_ADMIN")) {
+                  alert = new Alert(Alert.AlertType.INFORMATION);
+                  alert.setTitle("information message");
+                  alert.setHeaderText(null);
+                  alert.setContentText("successfully login as admin");
+                  alert.showAndWait();
+
+                  loginButton.getScene().getWindow().hide();
+
+                  Parent root = FXMLLoader.load(getClass().getResource("DashAdmin.fxml"));
+                  Stage stage=new Stage();
+                  Scene scene=new Scene(root);
+                  stage.setScene(scene);
+                  stage.setTitle("Hygie Dashboard Admin");
+                  stage.show();
+               }
+
+            } else {
                alert = new Alert(Alert.AlertType.ERROR);
                alert.setTitle("Error message");
                alert.setHeaderText(null);
                alert.setContentText("Incorrect username/password");
                alert.showAndWait();
-
             }
          }
 
-      }catch (Exception e) {
+      } catch (Exception e) {
          e.printStackTrace();
       } finally {
          try {
@@ -159,13 +211,10 @@ public class HelloController {
             e.printStackTrace();
          }
       }
-
    }
 
-
-
-public void registerAccount(){
-   String sql = "INSERT INTO user (fullname,email,password,cin,address,roles,isVerified,date)VALUES(?,?,?,?,?,?,?,?)";
+   public void registerAccount(){
+   String sql = "INSERT INTO user (fullname,email,password,cin,address,roles,isVerified,date,image,specialite,cv,description)VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
    database database=new database();
    database.connect();
 
@@ -216,12 +265,18 @@ public void registerAccount(){
                prepare.setString(4, cinTextField.getText());
                prepare.setString(5, addressTextField.getText());
                prepare.setString(6, "ROLE_USER");
-               prepare.setString(7, "yes");
+               prepare.setString(7, "1");
+
+
+
 
 
                java.sql.Date currentDate = new java.sql.Date(System.currentTimeMillis());
                prepare.setDate(8, java.sql.Date.valueOf(String.valueOf(currentDate)));
-
+               prepare.setString(9, "");
+               prepare.setString(10, "");
+               prepare.setString(11, "");
+               prepare.setString(12, "");
                prepare.executeUpdate();
 
                alert = new Alert(Alert.AlertType.INFORMATION);
@@ -250,8 +305,6 @@ public void registerAccount(){
 
 
 }
-
-
    public boolean validationEmail(){
       Pattern pattern = Pattern.compile("[a-zA-Z0-9][a-zA-Z0-9._]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+");
 
@@ -275,7 +328,6 @@ public void registerAccount(){
       }
 
    }
-
    public boolean validationCin(){
 
 
@@ -308,8 +360,6 @@ try {
 
 
    return true;}
-
-
    public void switchForm (ActionEvent e){
 if(e.getSource()==su_loginAccountBtn){
    login_form.setVisible(true);
@@ -334,7 +384,6 @@ if(e.getSource()==su_loginAccountBtn){
 }
 
    }
-
    public void cancelButtonOnAction(ActionEvent e)
    {
       Stage stage =(Stage) cancelButton.getScene().getWindow();
@@ -351,5 +400,99 @@ if(e.getSource()==su_loginAccountBtn){
 
 
    }
+
+
+   public void forgetPassword() {
+      String sql = "SELECT email,password FROM user WHERE email=?";
+      String email = emailTextField21.getText();
+
+      database database = new database();
+      database.connect();
+
+      try {
+         Alert alert;
+         if (email.isEmpty()) {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please enter your email address");
+            alert.showAndWait();
+         } else {
+            Pattern p = Pattern.compile("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+");
+            Matcher m = p.matcher(email);
+
+            if (!m.matches()) {
+               alert = new Alert(Alert.AlertType.ERROR);
+               alert.setTitle("Error message");
+               alert.setHeaderText(null);
+               alert.setContentText("Invalid email address");
+               alert.showAndWait();
+            } else {
+               prepare = con.prepareStatement(sql);
+               prepare.setString(1, email);
+
+               result = prepare.executeQuery();
+
+               if (result.next()) {
+                  String password = result.getString("password");
+                  String subject = "Password Recovery";
+                  String message = "Your password is " + password;
+
+                  // Create passwordField and showPasswordCheckBox
+                  PasswordField passwordField = new PasswordField();
+                  passwordField.setText(password);
+                  passwordField.setEditable(false);
+
+                  CheckBox showPasswordCheckBox = new CheckBox("Show Password");
+                  showPasswordCheckBox.setOnAction(event -> {
+                     if (showPasswordCheckBox.isSelected()) {
+                        passwordField.setPromptText(passwordField.getText());
+                        passwordField.setText("");
+                        passwordField.setEditable(true);
+                     } else {
+                        passwordField.setText(passwordField.getPromptText());
+                        passwordField.setEditable(false);
+                     }
+                  });
+
+                  // Create vBox
+                  VBox vBox = new VBox(passwordField, showPasswordCheckBox);
+                  vBox.setAlignment(Pos.CENTER);
+                  vBox.setSpacing(10);
+
+                  // Show information message with VBox
+                  alert = new Alert(Alert.AlertType.INFORMATION);
+                  alert.setTitle("Information message");
+                  alert.setHeaderText(null);
+                  alert.getDialogPane().setContent(vBox);
+                  alert.showAndWait();
+
+               } else {
+                  alert = new Alert(Alert.AlertType.ERROR);
+                  alert.setTitle("Error message");
+                  alert.setHeaderText(null);
+                  alert.setContentText("Email address not found");
+                  alert.showAndWait();
+               }
+            }
+         }
+      } catch (Exception e) {
+         e.printStackTrace();
+      } finally {
+         try {
+            if (prepare != null) {
+               prepare.close();
+            }
+            if (result != null) {
+               result.close();
+            }
+         } catch (Exception e) {
+            e.printStackTrace();
+         }
+      }
+   }
+
+
+
 
 }

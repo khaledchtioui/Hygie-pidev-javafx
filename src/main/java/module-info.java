@@ -3,6 +3,7 @@ module com.example.logindata {
     requires javafx.fxml;
     requires java.sql;
     requires mysql.connector.j;
+    requires java.mail;
 
 
     opens com.example.logindata to javafx.fxml;

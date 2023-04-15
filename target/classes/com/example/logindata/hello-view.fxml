@@ -18,7 +18,7 @@
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.logindata.HelloController">
    <children>
-      <BorderPane fx:id="login_form" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="620.0" visible="false">
+      <BorderPane fx:id="login_form" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="620.0">
           <left>
               <AnchorPane prefHeight="400.0" prefWidth="283.0" style="-fx-background-color: #263F73;" BorderPane.alignment="CENTER">
                   <children>
@@ -169,7 +169,7 @@
                </AnchorPane>
            </center>
        </BorderPane>
-      <BorderPane fx:id="forget_form" prefHeight="200.0" prefWidth="200.0">
+      <BorderPane fx:id="forget_form" prefHeight="200.0" prefWidth="200.0" visible="false">
          <left>
             <AnchorPane prefHeight="400.0" prefWidth="283.0" style="-fx-background-color: #263F73;" BorderPane.alignment="CENTER">
                <children>
@@ -209,7 +209,7 @@
                   </Label>
                   <Label layoutX="26.0" layoutY="188.0" text="Email" />
                   <TextField fx:id="emailTextField21" alignment="CENTER" layoutX="73.0" layoutY="183.0" prefHeight="26.0" prefWidth="213.0" promptText="Votre Email" style="-fx-background-radius: 20;" />
-                  <Button fx:id="loginButton1" layoutX="58.0" layoutY="230.0" mnemonicParsing="false" onAction="#loginAccount" prefHeight="31.0" prefWidth="234.0" style="-fx-background-color: #263F73; -fx-background-radius: 90;" text="Send" textFill="#f8f8f8">
+                  <Button fx:id="loginButton1" layoutX="58.0" layoutY="230.0" mnemonicParsing="false" onAction="#forgetPassword" prefHeight="31.0" prefWidth="234.0" style="-fx-background-color: #263F73; -fx-background-radius: 90;" text="Send" textFill="#f8f8f8">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
@@ -230,7 +230,7 @@
                         <Font name="Bodoni 72 Book" size="13.0" />
                      </font>
                   </Label>
-                  <ImageView fitHeight="20.0" fitWidth="21.0" layoutX="293.0" layoutY="376.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="20.0" fitWidth="21.0" layoutX="293.0" layoutY="377.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@copyright_image_3.jpeg" />
                      </image>

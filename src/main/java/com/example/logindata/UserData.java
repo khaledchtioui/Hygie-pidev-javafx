@@ -2,18 +2,39 @@ package com.example.logindata;
 
 public class UserData {
 
-private String fullname;
-private String email,cin,address,roles;
+public static String fullname;
+public static String email;
+
+public static  String cin,address;
+public static String password;
+public static String  roles;
+
+public static String description;
+    public static String image;
+    public static String cv;
+    public static String specialite;
+
 private Integer isverified;
 
 
-    public UserData(String fullname, String email, String cin, String address, String roles, Integer isverified) {
+    public UserData(String fullname, String email, String cin, String address, String roles, Integer isverified,String password,String specialite,String cv,String image,String description) {
         this.fullname = fullname;
         this.email = email;
         this.cin = cin;
         this.address = address;
         this.roles = roles;
         this.isverified = isverified;
+        this.password=password;
+        this.specialite=specialite;
+        this.cv=cv;
+        this.image=image;
+        this.description=description;
+
+
+    }
+
+    public UserData() {
+
     }
 
     public String getFullname() {
@@ -48,6 +69,37 @@ private Integer isverified;
         this.address = address;
     }
 
+    public static String getDescription() {
+        return description;
+    }
+
+    public static void setDescription(String description) {
+        UserData.description = description;
+    }
+
+    public static String getImage() {
+        return image;
+    }
+
+    public static void setImage(String image) {
+        UserData.image = image;
+    }
+
+    public static String getCv() {
+        return cv;
+    }
+
+    public static void setCv(String cv) {
+        UserData.cv = cv;
+    }
+
+    public static String getSpecialite() {
+        return specialite;
+    }
+
+    public static void setSpecialite(String specialite) {
+        UserData.specialite = specialite;
+    }
     public String getRoles() {
         return roles;
     }
@@ -60,6 +112,14 @@ private Integer isverified;
         return isverified;
     }
 
+    public static String getPassword() {
+        return password;
+    }
+
+    public static void setPassword(String password) {
+        UserData.password = password;
+    }
+
     public void setIsverified(Integer isverified) {
         this.isverified = isverified;
     }
@@ -70,7 +130,14 @@ private Integer isverified;
                 ", cin='" + cin + '\'' +
                 ", address='" + address + '\'' +
                 ", roles='" + roles + '\'' +
-                ", isverified=" + isverified +
+                ", isverified=" + isverified +'\'' +
+                ", password=" + password +'\'' +
+                ", image=" + image +'\'' +
+                ", specialite=" + specialite +'\'' +
+                ", cv=" + cv +'\'' +
+                ", description=" + description +
+
+
                 '}';
     }
 }
