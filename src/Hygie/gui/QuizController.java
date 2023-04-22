@@ -3,23 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Hygie.gui;
+package hygie.gui;
 
-import Hygie.entities.Questionnaire;
-import Hygie.services.QuizService;
-import Hygie.services.ServiceQuiz;
+import hygie.entities.Questionnaire;
+import hygie.services.ServiceQuiz;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,6 +28,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 /**
@@ -64,16 +60,26 @@ public class QuizController implements Initializable {
     @FXML
     private Button ajouter;
 
-    private          ServiceQuiz questionnaireService =new ServiceQuiz() ;
 
-  
+    private          ServiceQuiz questionnaireService =new ServiceQuiz() ;
+    @FXML
+    private Button Delete;
+    @FXML
+    private Button generate;
+    @FXML
+    private TextField search;
+ 
+    
+    
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-         ServiceQuiz rs =new ServiceQuiz() ;
+        
+        
+             ServiceQuiz rs =new ServiceQuiz() ;
       
             
         List<Questionnaire> questionnaires=rs.getAll() ;
@@ -106,24 +112,31 @@ public class QuizController implements Initializable {
             }
         });
          
-         
+        // TODO
     }    
-    @FXML
+
+  
     private void openNewInterface(Questionnaire questionnaire,int id) {
-    // Create a new stage (window) for the new interface
+        
+        
+
+
+       // Create a new stage (window) for the new interface
     Stage stage = new Stage();
     
     // Load the FXML file for the new interface
-            FXMLLoader loader = new FXMLLoader();
-loader.setLocation(QuestionsController.class.getResource("Questions.fxml"));
-    Parent root ;
+           
     try {
-     //   System.out.println("dd"+id);
-       QuestionsController newQuestionsController  = new QuestionsController();
-   //  newQuestionsController.setQ(questionnaire);
-      //loader.setController(newQuestionsController);
-    // Set the scene of the new stage with the loaded FXML file
-            root = loader.load();
+       FXMLLoader loader = new FXMLLoader(getClass().getResource("Questions.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller
+            QuestionsController controller = loader.getController();
+
+            // Set the ID value
+            controller.setQ(questionnaire);
+            controller.afficher();
+            System.out.println(controller);
 
     Scene scene = new Scene(root);
     stage.setScene(scene);
@@ -135,12 +148,9 @@ loader.setLocation(QuestionsController.class.getResource("Questions.fxml"));
         e.printStackTrace();
         return;
     }
-
-    // Get the controller of the new interface
-  
 }
 
-    
+
     
      @FXML
     private void ajouterAction(ActionEvent event    ) {
@@ -180,7 +190,6 @@ loader.setLocation(QuestionsController.class.getResource("Questions.fxml"));
         
        }
     }
-     @FXML
     private void Afficher() {
                 ServiceQuiz sp =new ServiceQuiz();
 
@@ -196,8 +205,17 @@ questionnaireTableView.getItems().clear();
         questionnaireTableView.refresh();
         
      //   ServiceQuiz sp = new ServiceQuiz();
-       // Listabel.setText(sp.getAll().toString());
+      //  Listabel.setText(sp.getAll().toString());
        
+    }
+     @FXML
+    private void handleGeneratePDF() {
+        Stage stage = (Stage) generate.getScene().getWindow();
+        PDFGenerator.generatePDF(stage);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("PDF Export");
+        alert.setHeaderText("PDF file created and saved successfully.");
+        alert.showAndWait();
     }
     
       @FXML
@@ -228,7 +246,6 @@ questionnaireTableView.getItems().clear();
     }
     
     
-      @FXML
     private void reloadTableView() {
          ServiceQuiz rs =new ServiceQuiz() ;
         
@@ -249,7 +266,6 @@ questionnaireTableView.getItems().clear();
     }
     
 
-      @FXML
     private void afficheQuiz() {
        
           ServiceQuiz rs =new ServiceQuiz() ;
@@ -265,5 +281,5 @@ questionnaireTableView.getItems().clear();
           
        
     }
-
+    
 }

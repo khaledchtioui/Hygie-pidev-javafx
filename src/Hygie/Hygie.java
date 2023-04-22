@@ -3,16 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package hygie;
 
-
-import Hygie.entities.Questionnaire;
-import Hygie.entities.Questions;
-import Hygie.services.ServiceQuestion;
-import Hygie.services.ServiceQuiz;
-import Hygie.utils.MyDB;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import hygie.entities.Questionnaire;
+import hygie.entities.Questions;
+import hygie.entities.Reponse;
+import hygie.services.ServiceReponse;
 
 /**
  *
@@ -26,21 +22,12 @@ public class Hygie {
     public static void main(String[] args) {
         // TODO code application logic here
         
-                MyDB.createorgetInstance();
-        //         Questionnaire p1 =new Questionnaire("Kalbousi");
-      //           p1.setId(15);
-    //             Questions ques = new Questions("zz",1,1,p1);
-             //    ServiceQuiz sp = new ServiceQuiz();
-        
-                 ServiceQuestion sq = new ServiceQuestion()    ;
-     
-//        ques.setId(19);
-//        sq.supprimer(ques); 
-//System.out.println(sp.getAll());
-        List<Map<String, Object>> resultList = new ArrayList<>();
-//resultList=sq.getAll2();
-   System.out.println(sq.getAllbyquiz(60));
-
+      
+        ServiceReponse sr = new ServiceReponse()  ;
+        //sr.Ajouter(r1);
+        Reponse r = new Reponse("ss",true,new Questions(40))  ;
+        sr.Ajouter(r);
+         System.out.println(sr.getAll2()); 
     }
     
 }

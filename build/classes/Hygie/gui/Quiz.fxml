@@ -12,12 +12,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="642.0" prefWidth="1397.0" style="-fx-background-color: royalblue;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Hygie.gui.QuizController">
+<AnchorPane id="AnchorPane" prefHeight="642.0" prefWidth="1397.0" style="-fx-background-color: royalblue;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hygie.gui.QuizController">
    <children>
       <Label layoutX="1057.0" layoutY="81.0" prefHeight="61.0" prefWidth="126.0" text="Questionnaire" textFill="WHITE" />
       <TextField fx:id="quiztf" layoutX="1175.0" layoutY="99.0" prefHeight="26.0" prefWidth="181.0" />
       <Button fx:id="ajouter" layoutX="339.0" layoutY="465.0" mnemonicParsing="false" onAction="#ajouterAction" prefHeight="48.0" prefWidth="200.0" text="      Ajouter Questionnaire" />
-      <TableView fx:id="questionnaireTableView" layoutX="326.0" layoutY="74.0" onMouseClicked="#afficheQuiz" prefHeight="310.0" prefWidth="681.0">
+    <Button fx:id="generate" layoutX="250.0" layoutY="180.0" onAction="#handleGeneratePDF" text="Generate PDF" />
+     
+      <TableView fx:id="questionnaireTableView" layoutX="326.0" layoutY="74.0" prefHeight="310.0" prefWidth="681.0">
          <columns>
             <TableColumn fx:id="idColumn" prefWidth="49.5999755859375" text="Id" />
             <TableColumn fx:id="nomColumn" prefWidth="397.6000061035156" text="Questionnaire" />
@@ -47,5 +49,6 @@
          </image>
       </ImageView>
       <HBox prefHeight="100.0" prefWidth="200.0" />
+      <TextField fx:id="search" layoutX="63.0" layoutY="246.0" />
    </children>
 </AnchorPane>

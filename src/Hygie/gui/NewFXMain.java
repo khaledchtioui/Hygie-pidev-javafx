@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Hygie.gui;
+package hygie.gui;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -18,26 +13,22 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-/**
- *
- * @author Andrew
- */
 public class NewFXMain extends Application {
-    
+
     @Override
     public void start(Stage primaryStage) {
-        try { 
+        try {
             Parent parent = FXMLLoader.load(getClass().getResource("Quiz.fxml"));
             Scene scene = new Scene(parent);
             primaryStage.setTitle("Quiz");
-  
+
             primaryStage.setScene(scene);
             primaryStage.show();
-            
-            } catch (IOException ex) {
+
+        } catch (IOException ex) {
             Logger.getLogger(NewFXMain.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
+
     }
 
     /**
@@ -46,5 +37,5 @@ public class NewFXMain extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }

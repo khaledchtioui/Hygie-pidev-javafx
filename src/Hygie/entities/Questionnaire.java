@@ -1,23 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Hygie.entities;
+package hygie.entities;
 
 import java.time.LocalDateTime;
 
-/**
- *
- * @author Khaled
- */
 public class Questionnaire {
-    
-    
-    private int id ; 
+
+
+    private int id ;
     private LocalDateTime date  ;
     private String nom ;
-    private String src1 ; 
+    private String src1 ;
     private String src2;
 
     public Questionnaire(int id, String nom, String src1, String src2) {
@@ -53,7 +44,7 @@ public class Questionnaire {
         this.nom = nom;
     }
 
-   
+
 
     public LocalDateTime getDate() {
         return date;
@@ -90,7 +81,7 @@ public class Questionnaire {
         this.id = id;
     }
 
-   
+
     public void setNom(String nom) {
         this.nom = nom;
     }
@@ -110,7 +101,7 @@ public class Questionnaire {
     public void setSrc2(String src2) {
         this.src2 = src2;
     }
-    
-    
-    
+
+
+
 }

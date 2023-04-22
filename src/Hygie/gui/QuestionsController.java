@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Hygie.gui;
+package hygie.gui;
 
-import Hygie.entities.Questionnaire;
+import hygie.entities.Questionnaire;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -15,9 +15,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import Hygie.entities.Questions;
-import Hygie.services.ServiceQuestion;
-import Hygie.services.ServiceQuiz;
+import hygie.entities.Questions;
+import hygie.services.ServiceQuestion;
+import hygie.services.ServiceQuiz;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,10 +28,14 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -41,9 +46,24 @@ public class QuestionsController implements Initializable {
 
     private int id ; 
     private Questionnaire q;
+    @FXML
+    private TableColumn<Map<String, Object>, String> questionQuestionColumn;
+    @FXML
+    private TableColumn<Map<String, Object>, String> questionTypeColumn;
+    @FXML
+    private TableColumn<Map<String, Object>, Integer> questionPointColumn;
+    @FXML
+    private Button modiferbtn;
+    @FXML
+    private Button deletbtn;
 
     public void setQ(Questionnaire q) {
         this.q = q;
+    }
+
+    @Override
+    public String toString() {
+        return "QuestionsController{" + "id=" + id + ", q=" + q.getId() + '}';
     }
 
    
@@ -63,13 +83,12 @@ public class QuestionsController implements Initializable {
 
    
 
-    
      private ObservableList<Map<String, Object>> getData() {
         // Call your getAll2() method to retrieve the data from the database
         ServiceQuestion serviceQuestion = new ServiceQuestion();
         
       //   System.out.println("aloo"+this.getQuestionnaireId());// Instantiate your service class
-        List<Map<String, Object>> resultList = serviceQuestion.getAll2(); // Call the getAll2() method to get the data
+        List<Map<String, Object>> resultList = serviceQuestion.getAllbyquiz(q.getId()); // Call the getAll2() method to get the data
 
         // Convert the List<Map<String, Object>> to an ObservableList
         ObservableList<Map<String, Object>> observableList = FXCollections.observableArrayList(resultList);
@@ -91,29 +110,10 @@ private TableView<Map<String, Object>> tableView;
     /**
      * Initializes the controller class.
      */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        combotype.getItems().addAll(choix)  ;
-        tableView.setItems(getData());
-      //  System.out.println(questionnaireId+"dd");
-        // Set up TableColumn cell value factories
-     
-     
-        TableColumn<Map<String, Object>, Integer> questionIdColumn = new TableColumn<>("Question ID");
-        questionIdColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty((Integer) cellData.getValue().get("question_id")).asObject());
-
-        TableColumn<Map<String, Object>, String> questionQuestionColumn = new TableColumn<>("Question");
-        questionQuestionColumn.setCellValueFactory(cellData -> new SimpleStringProperty((String) cellData.getValue().get("question_question")));
-
-        TableColumn<Map<String, Object>, String> questionTypeColumn = new TableColumn<>("Question Type");
-        questionTypeColumn.setCellValueFactory(cellData -> new SimpleStringProperty((String) cellData.getValue().get("question_type")));
-
-        TableColumn<Map<String, Object>, Integer> questionPointColumn = new TableColumn<>("Question Point");
-        questionPointColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty((Integer) cellData.getValue().get("question_point")).asObject());
-
-        tableView.getColumns().addAll(questionIdColumn, questionQuestionColumn, questionTypeColumn, questionPointColumn);
- 
-        tableView.setOnMouseClicked(event -> {
+             public void initialize(URL url, ResourceBundle rb) {
+                 
+                 
+                  tableView.setOnMouseClicked(event -> {
     if (event.getClickCount() == 1) { // Vérifier si c'est un clic simple
         Map<String, Object> rowData = tableView.getSelectionModel().getSelectedItem();
         if (rowData != null) {
@@ -132,6 +132,73 @@ private TableView<Map<String, Object>> tableView;
     }
 });
 
+                 
+                   tableView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) { // Detect double-click events
+                        Map<String, Object> rowData = tableView.getSelectionModel().getSelectedItem();
+             int xid = (Integer) rowData.get("question_id");
+
+                if (xid != 0) {
+                    // Open a new interface or window with the selected questionnaire data
+                    openNewInterface2(xid);
+                }
+            }
+        });
+    }    
+
+            private void openNewInterface2(int id) {
+        
+        
+
+
+       // Create a new stage (window) for the new interface
+    Stage stage = new Stage();
+    
+    // Load the FXML file for the new interface
+           
+    try {
+       FXMLLoader loader = new FXMLLoader(getClass().getResource("Reponse.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller
+            ReponseController controller = loader.getController();
+
+            // Set the ID value
+            controller.setId(id);
+            controller.afficher();
+            System.out.println(controller);
+
+    Scene scene = new Scene(root);
+    stage.setScene(scene);
+    
+    // Show the new stage
+    stage.show();
+        
+    } catch (IOException e) {
+        e.printStackTrace();
+        return;
+    }
+}
+
+    public void afficher() {
+        combotype.getItems().addAll(choix)  ;
+        tableView.setItems(getData());
+      //  System.out.println(questionnaireId+"dd");
+        // Set up TableColumn cell value factories
+     
+     
+        TableColumn<Map<String, Object>, Integer> questionIdColumn = new TableColumn<>("Question ID");
+        questionIdColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty((Integer) cellData.getValue().get("question_id")).asObject());
+
+        questionQuestionColumn.setCellValueFactory(cellData -> new SimpleStringProperty((String) cellData.getValue().get("question_question")));
+
+        questionTypeColumn.setCellValueFactory(cellData -> new SimpleStringProperty((String) cellData.getValue().get("question_type")));
+
+        questionPointColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty((Integer) cellData.getValue().get("question_point")).asObject());
+
+        tableView.getColumns().addAll(questionQuestionColumn, questionTypeColumn, questionPointColumn);
+ 
+       
 
        
         
@@ -142,9 +209,6 @@ private TableView<Map<String, Object>> tableView;
 
     }    
 
-    @FXML
-    private void afficheQuiz(MouseEvent event) {
-    }
     @FXML
     private void ajouterAction(ActionEvent event    ) {
         int x = 2 ; 
@@ -169,11 +233,11 @@ private TableView<Map<String, Object>> tableView;
         }
         else
         {
-              Questions q = new Questions(Questiontf.getText(),x,Integer.valueOf(Point.getText()),new Questionnaire(60));
+              Questions qs = new Questions(Questiontf.getText(),x,Integer.valueOf(Point.getText()),q);
         ServiceQuestion sp =new ServiceQuestion();
         
             
-                    sp.Ajouter(q);
+                    sp.Ajouter(qs);
                     tableView.setItems(getData());
 
                     clear();
@@ -209,7 +273,6 @@ private TableView<Map<String, Object>> tableView;
       //  afficheQuiz();
 
     }
-    @FXML
        private void clear() {
                 
 Questiontf.clear();
