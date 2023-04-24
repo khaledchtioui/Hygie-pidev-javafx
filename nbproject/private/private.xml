@@ -4,14 +4,21 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Khaled/Documents/Hygie/src/hygie/entities/Questionnaire.java</file>
+            <file>file:/C:/Users/Khaled/Documents/Hygie/src/hygie/services/ServiceQuiz.java</file>
             <file>file:/C:/Users/Khaled/Documents/Hygie/src/hygie/gui/Quiz.fxml</file>
             <file>file:/C:/Users/Khaled/Documents/Hygie/src/hygie/services/QuizService.java</file>
-            <file>file:/C:/Users/Khaled/Documents/Hygie/src/hygie/utils/MyDB.java</file>
-            <file>file:/C:/Users/Khaled/Documents/Hygie/src/hygie/gui/NewFXMain.java</file>
+            <file>file:/C:/Users/Khaled/Documents/Hygie/src/hygie/entities/Reponse.java</file>
+            <file>file:/C:/Users/Khaled/Documents/Hygie/src/hygie/entities/Questions.java</file>
             <file>file:/C:/Users/Khaled/Documents/Hygie/src/hygie/Hygie.java</file>
-            <file>file:/C:/Users/Khaled/Documents/Hygie/src/hygie/services/ServiceQuestion.java</file>
             <file>file:/C:/Users/Khaled/Documents/Hygie/src/hygie/gui/QuizController.java</file>
             <file>file:/C:/Users/Khaled/Documents/Hygie/src/hygie/gui/Questions.fxml</file>
+            <file>file:/C:/Users/Khaled/Documents/Hygie/src/hygie/utils/MyDB.java</file>
+            <file>file:/C:/Users/Khaled/Documents/Hygie/src/hygie/gui/NewFXMain.java</file>
+            <file>file:/C:/Users/Khaled/Documents/Hygie/src/hygie/gui/Reponse.fxml</file>
+            <file>file:/C:/Users/Khaled/Documents/Hygie/src/hygie/gui/ReponseController.java</file>
+            <file>file:/C:/Users/Khaled/Documents/Hygie/src/hygie/services/ServiceQuestion.java</file>
+            <file>file:/C:/Users/Khaled/Documents/Hygie/src/hygie/gui/PDFGenerator.java</file>
+            <file>file:/C:/Users/Khaled/Documents/Hygie/src/hygie/services/ServiceReponse.java</file>
             <file>file:/C:/Users/Khaled/Documents/Hygie/src/hygie/gui/QuestionsController.java</file>
         </group>
     </open-files>

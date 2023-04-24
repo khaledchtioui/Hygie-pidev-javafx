@@ -11,7 +11,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class ServiceQuiz implements QuizService<Questionnaire>{
@@ -78,6 +80,61 @@ public class ServiceQuiz implements QuizService<Questionnaire>{
         return  pers;
     }
 
+    
+    
+        public List<Map<String, Object>> getAllbyquiz(int id) {
+        List<Map<String, Object>> resultList = new ArrayList<>();
+        try {
+            ste =con.createStatement();
+
+            // Exécution de la requête SQL pour récupérer les données de la jointure
+            ResultSet rs = ste.executeQuery("SELECT q.id AS questionnaire_id, q.nom AS questionnaire_name, q.date AS questionnaire_date,\n" +
+"       qs.id AS question_id, qs.question AS question_text, qs.type AS question_type, qs.point AS question_point,\n" +
+"       r.id AS response_id, r.reponsee AS response_text, r.type AS response_type\n" +
+"FROM questionnaire q\n" +
+"JOIN questions qs ON qs.quizid_id = q.id\n" +
+"LEFT JOIN reponse r ON r.questionid_id = qs.id\n" +
+"WHERE q.id=60\n" +
+"ORDER BY q.id, qs.id, r.id;\n" +
+"");
+            // Parcours du résultat de la requête et stockage dans une liste de Map
+            while (rs.next()) {
+                Map<String, Object> row = new HashMap<>();
+                row.put("questionnaire_id", rs.getInt("questionnaire_id"));
+                row.put("questionnaire_name", rs.getString("questionnaire_name"));
+                //row.put("questionnaire_date", rs.getObject("questionnaire_date", LocalDateTime.class));
+                row.put("question_id", rs.getInt("question_id"));
+                row.put("question_text", rs.getString("question_text"));             
+                row.put("question_type",rs.getInt("question_type"));
+                row.put("question_point", rs.getInt("question_point"));
+                row.put("reponse_text", rs.getString("response_text"));
+                
+                resultList.add(row);
+            }
+
+            // Fermeture du ResultSet
+            rs.close();
+        } catch (SQLException ex) {
+            // Gestion des exceptions
+            System.err.println("Erreur lors de l'exécution de la requête SQL : " + ex.getMessage());
+            ex.printStackTrace();
+        } finally {
+            // Fermeture de la connexion à la base de données
+            if (ste != null) {
+                try {
+                    ste.close();
+                } catch (SQLException ex) {
+                    System.err.println("Erreur lors de la fermeture de la connexion : " + ex.getMessage());
+                    ex.printStackTrace();
+                }
+            }
+        }
+
+        return resultList;
+    }
+
+    
+    
     @Override
     public void supprimer(Questionnaire t) {
 

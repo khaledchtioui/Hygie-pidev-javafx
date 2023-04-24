@@ -17,7 +17,7 @@
       <Label layoutX="1057.0" layoutY="81.0" prefHeight="61.0" prefWidth="126.0" text="Questionnaire" textFill="WHITE" />
       <TextField fx:id="quiztf" layoutX="1175.0" layoutY="99.0" prefHeight="26.0" prefWidth="181.0" />
       <Button fx:id="ajouter" layoutX="339.0" layoutY="465.0" mnemonicParsing="false" onAction="#ajouterAction" prefHeight="48.0" prefWidth="200.0" text="      Ajouter Questionnaire" />
-    <Button fx:id="generate" layoutX="250.0" layoutY="180.0" onAction="#handleGeneratePDF" text="Generate PDF" />
+    <Button fx:id="generate" layoutX="216.0" layoutY="180.0" onAction="#handleGeneratePDF" text="Generate PDF" />
      
       <TableView fx:id="questionnaireTableView" layoutX="326.0" layoutY="74.0" prefHeight="310.0" prefWidth="681.0">
          <columns>
@@ -50,5 +50,6 @@
       </ImageView>
       <HBox prefHeight="100.0" prefWidth="200.0" />
       <TextField fx:id="search" layoutX="63.0" layoutY="246.0" />
+      <Button layoutX="85.0" layoutY="167.0" mnemonicParsing="false" onAction="#handle" prefHeight="26.0" prefWidth="74.0" text="Excel" />
    </children>
 </AnchorPane>

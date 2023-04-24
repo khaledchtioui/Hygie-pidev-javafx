@@ -8,6 +8,7 @@ package hygie;
 import hygie.entities.Questionnaire;
 import hygie.entities.Questions;
 import hygie.entities.Reponse;
+import hygie.services.ServiceQuiz;
 import hygie.services.ServiceReponse;
 
 /**
@@ -22,7 +23,8 @@ public class Hygie {
     public static void main(String[] args) {
         // TODO code application logic here
         
-      
+      ServiceQuiz sq = new ServiceQuiz()  ;
+        System.out.println(sq.getAllbyquiz(0));
         ServiceReponse sr = new ServiceReponse()  ;
         //sr.Ajouter(r1);
         Reponse r = new Reponse("ss",true,new Questions(40))  ;

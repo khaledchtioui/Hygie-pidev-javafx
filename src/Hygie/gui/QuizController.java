@@ -114,8 +114,12 @@ public class QuizController implements Initializable {
          
         // TODO
     }    
+     @FXML
 
-  
+            public void handle(ActionEvent event) {
+                // Call the exportToExcel method to generate the Excel file
+               ExcelExporter.exportToExcel();
+            }
     private void openNewInterface(Questionnaire questionnaire,int id) {
         
         
