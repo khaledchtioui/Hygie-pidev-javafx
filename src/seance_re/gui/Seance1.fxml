@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
-<Pane prefHeight="498.0" prefWidth="712.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seance_re.gui.SeanceView">
+<Pane prefHeight="498.0" prefWidth="712.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seance_re.gui.SeanceView">
    <children>
       <HBox prefHeight="40.0" prefWidth="712.0">
          <children>

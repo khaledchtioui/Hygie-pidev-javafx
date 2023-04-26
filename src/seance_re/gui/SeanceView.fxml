@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -10,22 +12,30 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="458.0" prefWidth="712.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seance_re.gui.Seance1">
    <children>
+      <TextField fx:id="searchBar" layoutX="261.0" layoutY="3.0" prefHeight="28.0" prefWidth="321.0" stylesheets="@textfield.css" />
+      <ComboBox fx:id="sortComboBox" layoutX="593.0" layoutY="3.0" prefHeight="28.0" prefWidth="106.0" stylesheets="@combobox.css" />
+
       <TextField fx:id="description_seance" layoutX="38.0" layoutY="175.0" prefHeight="78.0" prefWidth="202.0" styleClass="text-field" stylesheets="@textfield.css" />
       <TextField fx:id="prix_seance" layoutX="38.0" layoutY="350.0" prefHeight="26.0" prefWidth="202.0" stylesheets="@textfield.css" />
       <Button layoutX="260.0" layoutY="414.0" mnemonicParsing="false" onAction="#ajouterAction" prefHeight="34.0" prefWidth="127.0" stylesheets="@btn.css" text="Ajouter" />
-      <DatePicker fx:id="date_seance" layoutX="38.0" layoutY="285.0" prefHeight="26.0" prefWidth="202.0" styleClass="text-field" stylesheets="@textfield.css" />
+      <DatePicker fx:id="date_seance" layoutX="38.0" layoutY="285.0" prefHeight="26.0" prefWidth="202.0" stylesheets="@datepicker.css">
+         <styleClass>
+            <String fx:value="text-field" />
+            <String fx:value="date-picker" />
+            <String fx:value="arrow" />
+            <String fx:value="arrow-button" />
+            <String fx:value="day-cell" />
+         </styleClass></DatePicker>
       <TextField fx:id="titre_seance" layoutX="38.0" layoutY="56.0" prefHeight="26.0" prefWidth="202.0" styleClass="text-field" stylesheets="@textfield.css" />
       <Button fx:id="upload" layoutX="38.0" layoutY="110.0" mnemonicParsing="false" onAction="#uploadImage" prefHeight="26.0" prefWidth="202.0" stylesheets="@btn.css" text="upload" />
       <Button fx:id="supprimer" layoutX="571.0" layoutY="414.0" mnemonicParsing="false" onAction="#supprimer" prefHeight="34.0" prefWidth="127.0" stylesheets="@btn.css" text="supprimer" />
       <Button fx:id="modifier" layoutX="416.0" layoutY="414.0" mnemonicParsing="false" onAction="#handleBtnModifier" prefHeight="34.0" prefWidth="127.0" stylesheets="@btn.css" text="modifier" />
-      <TableView fx:id="tableView" layoutX="260.0" layoutY="14.0" prefHeight="392.0" prefWidth="438.0">
+      <TableView fx:id="tableView" layoutX="261.0" layoutY="36.0" prefHeight="367.0" prefWidth="438.0">
          <columns>
             <TableColumn fx:id="titreCol" prefWidth="75.0" text="Titre" />
-            <TableColumn fx:id="imageCol" prefWidth="75.0" text="image" />
             <TableColumn fx:id="descriptionCol" prefWidth="64.0" text="description" />
-            <TableColumn fx:id="prixCol" prefWidth="76.0" text="prix" />
-            <TableColumn fx:id="dateCol" prefWidth="103.0" text="date" />
-            <TableColumn fx:id="idCol" prefWidth="103.0" text="id" />
+            <TableColumn fx:id="prixCol" prefWidth="77.0" text="prix" />
+            <TableColumn fx:id="dateCol" prefWidth="102.0" text="date" />
          </columns>
       </TableView>
       <Label layoutX="37.0" layoutY="36.0" text="Titre" />

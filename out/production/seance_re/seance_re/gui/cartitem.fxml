@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="seance_re.gui.CartitemController">
+    <children>
+        <ImageView fx:id="imageView" fitWidth="200" fitHeight="200" preserveRatio="true"/>
+        <Label fx:id="titleLabel" styleClass="title-label"/>
+        <Label fx:id="descriptionLabel" styleClass="description-label"/>
+        <Label fx:id="priceLabel" styleClass="price-label"/>
+        <Label fx:id="dateLabel" styleClass="date-label"/>
+        <Button fx:id="addToCartButton" text="Ajouter au panier" styleClass="add-to-cart-button"/>
+    </children>
+</VBox>

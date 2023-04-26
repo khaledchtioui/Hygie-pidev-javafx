@@ -1,5 +1,6 @@
 package seance_re.gui;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,7 +11,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import seance_re.entities.Seance;
+import java.util.Comparator;
+import javafx.collections.FXCollections;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
@@ -55,16 +59,14 @@ public class Seance1 implements Initializable{
     private TableView<Seance> tableView;
     @FXML
     private TableColumn<Seance, String> titreCol;
-    @FXML
-    private TableColumn<Seance, ImageView> imageCol;
+
     @FXML
     private TableColumn<Seance, String> descriptionCol;
     @FXML
     private TableColumn<Seance, Double> prixCol;
     @FXML
     private TableColumn<Seance, Date> dateCol;
-    @FXML
-    private TableColumn<Seance, String>  idCol;
+
     private ObservableList<Seance> observableList;
     private ServiceSeance ServiceSeance;
     private Seance selectedSeance;
@@ -72,6 +74,11 @@ public class Seance1 implements Initializable{
     Button supprimer;
     @FXML
     Button modifier;
+    @FXML
+    private TextField searchBar;
+    @FXML
+    private ComboBox<String> sortComboBox;
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -79,7 +86,7 @@ public class Seance1 implements Initializable{
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
                 LocalDate today = LocalDate.now();
-                setDisable(empty || date.compareTo(today) < 0 );
+                setDisable(empty || date.compareTo(today) < 0);
             }
         });
 
@@ -117,22 +124,59 @@ public class Seance1 implements Initializable{
 
         observableList = FXCollections.observableArrayList();
         ServiceSeance = new ServiceSeance();
-        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         titreCol.setCellValueFactory(new PropertyValueFactory<>("titre"));
         descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         prixCol.setCellValueFactory(new PropertyValueFactory<>("prix"));
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
-        imageCol.setCellValueFactory(new PropertyValueFactory<>("image"));
+        // Créer une nouvelle colonne pour l'affichage de l'image décodée
+        TableColumn<Seance, Image> decodedImageCol = new TableColumn<>("Image");
+
+// Créer la cell factory personnalisée pour l'affichage de l'image décodée
+        decodedImageCol.setCellFactory(col -> new TableCell<Seance, Image>() {
+            private final ImageView imageView = new ImageView();
+
+            @Override
+            protected void updateItem(Image item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    // Définir l'image dans l'ImageView
+                    imageView.setImage(item);
+                    // Redimensionner l'image pour qu'elle rentre dans la cellule
+                    imageView.setFitWidth(50);
+                    imageView.setFitHeight(50);
+                    // Afficher l'ImageView dans la cellule
+                    setGraphic(imageView);
+                }
+            }
+        });
+
+// Ajouter la nouvelle colonne à la TableView
+        tableView.getColumns().add(decodedImageCol);
+
+// Définir la fonction de décodage pour la colonne d'affichage de l'image décodée
+        decodedImageCol.setCellValueFactory(cellData -> {
+            // Récupérer l'image encodée à partir de la colonne image existante
+            String encodedImage = cellData.getValue().getImage();
+            if (encodedImage == null) {
+                return new SimpleObjectProperty<>(null);
+            }
+            // Décompresser l'image encodée
+            byte[] decodedBytes = Base64.getDecoder().decode(encodedImage);
+            // Créer une nouvelle instance de Image à partir des données décompressées
+            Image decodedImage = new Image(new ByteArrayInputStream(decodedBytes));
+            // Retourner l'image décodée
+            return new SimpleObjectProperty<>(decodedImage);
+        });
 
 
         tableView.setItems(observableList);
         loadData();
 
 
-
-
-
-       date_seance.setValue(LocalDate.now());
+        date_seance.setValue(LocalDate.now());
         supprimer.disableProperty().bind(Bindings.isEmpty(tableView.getSelectionModel().getSelectedItems()));
         tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
@@ -154,7 +198,7 @@ public class Seance1 implements Initializable{
             {
                 reservationButton.setOnAction(e -> {
                     Seance seanceSelectionnee = getTableView().getSelectionModel().getSelectedItem();
-                    if(seanceSelectionnee != null) {
+                    if (seanceSelectionnee != null) {
                         try {
                             ServiceSeance.reserveSeance(seanceSelectionnee);
                             // Actualiser la table des réservations ici
@@ -180,6 +224,54 @@ public class Seance1 implements Initializable{
         });
         tableView.getColumns().add(reservationColumn);
 
+        searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
+            observableList.clear();
+            List<Seance> seances = ServiceSeance.rechercherSeance(newValue);
+            observableList.addAll(seances);
+            tableView.setItems(observableList);
+        });
+
+        ObservableList<String> sortOptions = FXCollections.observableArrayList("Titre (asc)", "Titre (des)", "Prix (asc)", "Prix (des)", "Date (asc)", "Date (des)");
+        sortComboBox.setItems(sortOptions);
+        sortComboBox.setValue("Titre (asc)"); // set default sort option
+        sortComboBox.setOnAction(event -> {
+            String selectedSortOption = sortComboBox.getValue();
+            boolean isAscending = selectedSortOption.endsWith("(asc)"); // check if selected option is ascending or descending
+            switch (selectedSortOption) {
+                case "Titre (asc)":
+                case "Titre (des)":
+                    // sort by Titre column
+                    if (isAscending) {
+                        tableView.getItems().sort(Comparator.comparing(Seance::getTitre));
+                    } else {
+                        tableView.getItems().sort(Comparator.comparing(Seance::getTitre).reversed());
+                    }
+                    break;
+                case "Prix (asc)":
+                case "Prix (des)":
+                    // sort by Prix column
+                    if (isAscending) {
+                        tableView.getItems().sort(Comparator.comparing(Seance::getPrix));
+                    } else {
+                        tableView.getItems().sort(Comparator.comparing(Seance::getPrix).reversed());
+                    }
+                    break;
+                case "Date (asc)":
+                case "Date (des)":
+                    // sort by Date column
+                    if (isAscending) {
+                        tableView.getItems().sort(Comparator.comparing(Seance::getDate));
+                    } else {
+                        tableView.getItems().sort(Comparator.comparing(Seance::getDate).reversed());
+                    }
+                    break;
+            }
+        });
+
+// ...
+
+
+
         // TODO
     }
     public void uploadImage() {
@@ -187,7 +279,7 @@ public class Seance1 implements Initializable{
         fileChooser.getExtensionFilters().addAll(
                 new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
                 new ExtensionFilter("All Files", "*.*"));
-         selectedFile = fileChooser.showOpenDialog(null);
+        selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
             upload.setText(selectedFile.getName());
         } else {
@@ -198,32 +290,32 @@ public class Seance1 implements Initializable{
 
         sp.setSelectedFile(filePath);
     }
-        @FXML
+    @FXML
     private void ajouterAction() {
-            if (selectedFile == null) {
-                System.out.println("Please select a file!");
-                return;
-            }
+        if (selectedFile == null) {
+            System.out.println("Please select a file!");
+            return;
+        }
         LocalDate  dateString = date_seance.getValue();
         System.out.println("Selected date: " + dateString);
 
-    ServiceSeance sp = new ServiceSeance();
-    String filePath;
-    filePath = selectedFile.toString();
-    sp.setSelectedFile(filePath);
-    String imageData = sp.getImageData(selectedFile);
-            try {
-    Seance p = new Seance(titre_seance.getText(), imageData, description_seance.getText(), Float.parseFloat(prix_seance.getText()), Date.valueOf(dateString));
-                sp.Ajouter(p);
-                loadData();
-            } catch (NumberFormatException e) {
-                // Show an error message if the price value is not a valid float
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid price value!");
-                alert.showAndWait();
-            }
-
-
+        ServiceSeance sp = new ServiceSeance();
+        String filePath;
+        filePath = selectedFile.toString();
+        sp.setSelectedFile(filePath);
+        String imageData = sp.getImageData(selectedFile);
+        try {
+            Seance p = new Seance(titre_seance.getText(), imageData, description_seance.getText(), Float.parseFloat(prix_seance.getText()), Date.valueOf(dateString));
+            sp.Ajouter(p);
+            loadData();
+        } catch (NumberFormatException e) {
+            // Show an error message if the price value is not a valid float
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid price value!");
+            alert.showAndWait();
         }
+
+
+    }
 
     private void loadData() {
         observableList.clear();
@@ -289,13 +381,15 @@ public class Seance1 implements Initializable{
             filePath = selectedFile.toString();
             sp.setSelectedFile(filePath);
             imageData = sp.getImageData(selectedFile);
+        } else {
+            // If no file has been selected, retrieve the existing image of the seance
+            imageData = selectedSeance.getImage();
         }
 
         Seance seanceModifiee = new Seance(titre_seance.getText(), imageData, description_seance.getText(), Float.parseFloat(prix_seance.getText()), Date.valueOf(dateString));
         seanceModifiee.setId(selectedSeance.getId());
 
         try {
-
             ServiceSeance.modifierSeance(seanceModifiee);
             observableList.remove(selectedSeance);
             observableList.add(seanceModifiee);
@@ -303,6 +397,55 @@ public class Seance1 implements Initializable{
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public class ImageTableCell<S> extends TableCell<S, String> {
+
+        private final ImageView imageView;
+
+        public ImageTableCell() {
+            imageView = new ImageView();
+            imageView.setFitHeight(50);
+            imageView.setFitWidth(50);
+            setGraphic(imageView);
+        }
+
+        @Override
+        protected void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+
+            if (item == null || empty) {
+                imageView.setImage(null);
+            } else {
+                byte[] imageData = Base64.getDecoder().decode(item);
+                Image image = new Image(new ByteArrayInputStream(imageData));
+                imageView.setImage(image);
+            }
+        }
+    }
+    public void handleSearch() {
+        String searchText = searchBar.getText().toLowerCase();
+        ObservableList<Seance> filteredData = tableView.getItems().filtered(
+                s -> s.getTitre().toLowerCase().contains(searchText)
+        );
+        tableView.setItems(filteredData);
+    }
+    @FXML
+    public void searchBar() {
+        // Get the search string entered by the user
+        String rechercheAvancee = searchBar.getText().trim();
+
+        // Clear the previous list of seances
+        observableList.clear();
+
+        // Fetch the list of seances matching the search criteria
+        List<Seance> seances = ServiceSeance.rechercherSeance(rechercheAvancee);
+
+        // Add the seances to the observable list
+        observableList.addAll(seances);
+
+        // Update the table view with the new list of seances
+        tableView.setItems(observableList);
     }
 
 

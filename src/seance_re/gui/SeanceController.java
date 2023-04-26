@@ -2,26 +2,21 @@ package seance_re.gui;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
-import seance_re.entities.Seance;
-import seance_re.services.ServiceSeance;
 
+import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+
 public class SeanceController implements Initializable {
     @FXML
     private Label Menu;
@@ -33,6 +28,8 @@ public class SeanceController implements Initializable {
 
     @FXML
     private AnchorPane slider;
+    @FXML
+    private Button Forum;
 
 
     @Override
@@ -73,10 +70,8 @@ public class SeanceController implements Initializable {
 
         try {
             Parent fxml = javafx.fxml.FXMLLoader.load(getClass().getResource("Seance1.fxml"));
-            Parent fxml1 = javafx.fxml.FXMLLoader.load(getClass().getResource("Forum.fxml"));
             contentArea.getChildren().removeAll();
             contentArea.getChildren().setAll(fxml);
-            contentArea.getChildren().setAll(fxml1);
 
         } catch (Exception e) {
             System.out.println("can't load the page");
@@ -96,18 +91,17 @@ public class SeanceController implements Initializable {
         }
 
     }
-    public void Forum(ActionEvent event) {
-        try {
-            Parent fxml1 = javafx.fxml.FXMLLoader.load(getClass().getResource("Forum.fxml"));
-            contentArea.getChildren().removeAll();
-            contentArea.getChildren().setAll(fxml1);
-        } catch (Exception e) {
-            System.out.println("can't load the page");
+    @FXML
+    private void openforum(ActionEvent event) throws IOException {
 
-        }
-
-        }
-
+        Parent root = FXMLLoader.load(getClass().getResource("Home_front.fxml"));
+        Stage stage=new Stage();
+        Scene scene=new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Hygie");
+        stage.show();
+        ((Node)event.getSource()).getScene().getWindow().hide();
+    }
 
 
     }

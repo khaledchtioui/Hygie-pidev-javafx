@@ -24,8 +24,6 @@ public class Reservation implements Initializable {
     @FXML
     private TableView<Seance> tableR;
 
-    @FXML
-    private TableColumn<Seance, Integer> id;
 
     @FXML
     private TableColumn<Seance, String> titreR;
@@ -54,7 +52,6 @@ public class Reservation implements Initializable {
         serviceSeance = new ServiceSeance();
 
         // Associate each column to the corresponding property of the Seance object
-        id.setCellValueFactory(new PropertyValueFactory<>("id"));
         titreR.setCellValueFactory(new PropertyValueFactory<>("titre"));
         imageR.setCellValueFactory(new PropertyValueFactory<>("image"));
         descriptionR.setCellValueFactory(new PropertyValueFactory<>("description"));

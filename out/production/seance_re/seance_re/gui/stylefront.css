@@ -1,0 +1,30 @@
+
+   .title-label {
+       -fx-font-size: 16px;
+       -fx-font-weight: bold;
+       -fx-text-fill: #333;
+   }
+
+.description-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666;
+}
+
+.price-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2ecc71;
+}
+
+.date-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #3498db;
+}
+
+.add-to-cart-button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: #fff;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-pref-width: 150px;
+}

@@ -1,18 +1,16 @@
 package seance_re.services;
 
+import javafx.scene.image.Image;
 import seance_re.Seance_re;
 import seance_re.entities.Seance;
 import seance_re.utilities.MyDB;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.sql.*;
-import java.util.ArrayList;
-
-import java.util.Base64;
+import java.sql.Date;
+import java.util.*;
 import java.util.List;
 
 public class ServiceSeance implements IService<Seance>{
@@ -52,17 +50,31 @@ public class ServiceSeance implements IService<Seance>{
     }
     public String getImageData(File file) {
         String imageData = null;
-        try {
-            byte[] bytes = Files.readAllBytes(file.toPath());
-            imageData = Base64.getEncoder().encodeToString(bytes);
-        } catch (IOException ex) {
-            System.err.println(ex.getMessage());
+        if (file != null) {
+            try {
+                byte[] bytes = Files.readAllBytes(file.toPath());
+                imageData = Base64.getEncoder().encodeToString(bytes);
+            } catch (IOException ex) {
+                System.err.println(ex.getMessage());
+            }
         }
         return imageData;
     }
+
     public void setSelectedFile(String filePath) {
-        this.selectedFile = new File(filePath);
+        File file = new File(filePath);
+        if (!file.exists() || !file.isFile()) {
+            System.err.println("Invalid file path: " + filePath);
+            return;
+        }
+        this.selectedFile = file;
     }
+
+    private String encodeImage(String imageData) {
+        return imageData;
+    }
+
+
     public ArrayList<Seance> Afficher(){
         ArrayList<Seance> seances = new ArrayList<>();
         try {
@@ -73,6 +85,8 @@ public class ServiceSeance implements IService<Seance>{
                 Seance s = new Seance();
                 s.setId(rs.getInt("id"));
                 s.setTitre(rs.getString("titre"));
+                String imageData = rs.getString("image");
+                s.setImage(encodeImage(imageData));
                 s.setImage(rs.getString("image"));
                 s.setDescription(rs.getString("description"));
                 s.setPrix(rs.getFloat("prix"));
@@ -102,11 +116,24 @@ public class ServiceSeance implements IService<Seance>{
 
             // assignation des valeurs aux paramètres de la requête
             statement.setString(1, seance.getTitre());
-            if (selectedFile != null) {
-                statement.setString(2, getImageData(selectedFile));
+
+            // check if imageData is null or empty
+            String imageData = seance.getImage();
+            if (imageData == null || imageData.isEmpty()) {
+                // retrieve existing image data from database
+                String query2 = "SELECT image FROM `hygie_app`.`seance` WHERE id=?";
+                PreparedStatement statement2 = con.prepareStatement(query2);
+                statement2.setInt(1, seance.getId());
+                ResultSet rs = statement2.executeQuery();
+                if (rs.next()) {
+                    imageData = rs.getString("image");
+                }
             } else {
-                statement.setNull(2, Types.VARCHAR);
+                // update image column with new image data
+                imageData = getImageData(selectedFile);
             }
+
+            statement.setString(2, imageData);
             statement.setString(3, seance.getDescription());
             statement.setFloat(4, seance.getPrix());
             statement.setDate(5, new java.sql.Date(seance.getDate().getTime()));
@@ -119,17 +146,32 @@ public class ServiceSeance implements IService<Seance>{
             System.out.println("Error updating seance: " + e.getMessage());
         }
     }
-    public void reserveSeance(Seance seance) throws SQLException{
+
+    public boolean seanceDejaReservee(Seance seance) throws SQLException {
+        String query = "SELECT COUNT(*) FROM `hygie_app`.`reservation` WHERE `seance_id` = ?";
+        PreparedStatement statement = con.prepareStatement(query);
+        statement.setInt(1, seance.getId());
+        ResultSet rs = statement.executeQuery();
+        rs.next();
+        int count = rs.getInt(1);
+        return count > 0;
+    }
+
+
+    public void reserveSeance(Seance seance) throws SQLException {
+        if (seanceDejaReservee(seance)) {
+            System.out.println("La séance a déjà été réservée !");
+            return;
+        }
+
         try {
             String query = "INSERT INTO `hygie_app`.`reservation` (seance_id) VALUES (?)";
             PreparedStatement statement = con.prepareStatement(query);
             statement.setInt(1, seance.getId());
             statement.executeUpdate();
-            System.out.println("Seance reservée avec succès !");
-
-
-        }catch (Exception e){
-            System.out.println(e.getMessage());
+            System.out.println("Séance réservée avec succès !");
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la réservation de la séance : " + e.getMessage());
         }
     }
 
@@ -165,7 +207,137 @@ public class ServiceSeance implements IService<Seance>{
         } catch (SQLException e) {
             System.out.println("Error deleting reservation: " + e.getMessage());
         }
+
     }
+
+    public List<Seance> getAllSeances() throws SQLException {
+        List<Seance> seances = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM `hygie_app`.`seance`";
+            PreparedStatement pst = con.prepareStatement(query);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Seance seance = new Seance();
+                seance.setId(rs.getInt("id"));
+                seance.setTitre(rs.getString("titre"));
+                seance.setImage(rs.getString("image"));
+                seance.setDescription(rs.getString("description"));
+                seance.setPrix(rs.getFloat("prix"));
+                seance.setDate(rs.getDate("date"));
+                seances.add(seance);
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+        return seances;
+    }
+
+    public List<Seance> rechercherSeance(String recherche) {
+        List<Seance> seances = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM `hygie_app`.`seance` WHERE titre LIKE ? OR description LIKE ?";
+            PreparedStatement pst = con.prepareStatement(query);
+            pst.setString(1, "%" + recherche.trim() + "%");
+            pst.setString(2, "%" + recherche.trim() + "%");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Seance seance = new Seance();
+                seance.setTitre(rs.getString("titre"));
+                seance.setDescription(rs.getString("description"));
+                seance.setPrix(rs.getFloat("prix"));
+                seance.setDate(rs.getDate("date"));
+                seances.add(seance);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error executing query: " + ex.getMessage());
+        }
+        return seances;
+    }
+
+    public List<Seance> trierSeancesParTitre() {
+        List<Seance> seances = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM `hygie_app`.`seance` ORDER BY titre";
+            PreparedStatement pst = con.prepareStatement(query);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Seance seance = new Seance();
+                seance.setTitre(rs.getString("titre"));
+                seance.setDescription(rs.getString("description"));
+                seance.setPrix(rs.getFloat("prix"));
+                seance.setDate(rs.getDate("date"));
+                seances.add(seance);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error executing query: " + ex.getMessage());
+        }
+        return seances;
+    }
+
+    public List<Seance> trierSeancesParDescription() {
+        List<Seance> seances = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM `hygie_app`.`seance` ORDER BY description";
+            PreparedStatement pst = con.prepareStatement(query);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Seance seance = new Seance();
+                seance.setTitre(rs.getString("titre"));
+                seance.setDescription(rs.getString("description"));
+                seance.setPrix(rs.getFloat("prix"));
+                seance.setDate(rs.getDate("date"));
+                seances.add(seance);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error executing query: " + ex.getMessage());
+        }
+        return seances;
+    }
+
+    public List<Seance> trierSeancesParPrix() {
+        List<Seance> seances = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM `hygie_app`.`seance` ORDER BY prix";
+            PreparedStatement pst = con.prepareStatement(query);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Seance seance = new Seance();
+                seance.setTitre(rs.getString("titre"));
+                seance.setDescription(rs.getString("description"));
+                seance.setPrix(rs.getFloat("prix"));
+                seance.setDate(rs.getDate("date"));
+                seances.add(seance);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error executing query: " + ex.getMessage());
+        }
+        return seances;
+    }
+
+    public List<Seance> trierSeancesParDate() {
+        List<Seance> seances = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM `hygie_app`.`seance` ORDER BY date";
+            PreparedStatement pst = con.prepareStatement(query);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Seance seance = new Seance();
+                seance.setTitre(rs.getString("titre"));
+                seance.setDescription(rs.getString("description"));
+                seance.setPrix(rs.getFloat("prix"));
+                seance.setDate(rs.getDate("date"));
+                seances.add(seance);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error executing query: " + ex.getMessage());
+        }
+        return seances;
+    }
+
+
+
+
+
 
 
 }

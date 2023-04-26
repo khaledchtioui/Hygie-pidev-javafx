@@ -1,6 +1,13 @@
 package seance_re.entities;
 
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Date;
 
 public class Seance {
@@ -10,9 +17,13 @@ public class Seance {
     String description;
     float prix;
     Date date;
+    String devise;
+
+
     public Seance() {
         // Default constructor
     }
+
     public Seance(int id, String titre, String image, String description, float prix, Date date) {
         this.id = id;
         this.titre = titre;
@@ -21,6 +32,7 @@ public class Seance {
         this.prix = prix;
         this.date = date;
     }
+
     public Seance(String titre, String image, String description, float prix, Date date) {
         this.titre = titre;
         this.image = image;
@@ -87,4 +99,15 @@ public class Seance {
     public void setDate(Date date) {
         this.date = date;
     }
+
+    public String getDevise() {
+        return devise;
+    }
+
+    public String getCurrency() {
+        return devise;
+    }
+
+
+
 }

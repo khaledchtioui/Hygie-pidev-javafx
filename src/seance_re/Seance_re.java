@@ -38,8 +38,8 @@ public class Seance_re  extends Application {
 public void start(Stage primaryStage) {
 try {
     Parent root = FXMLLoader.load(getClass().getResource("gui/Seance.fxml"));
-    Parent parent = FXMLLoader.load(getClass().getResource("gui/Seance1.fxml"));
-    Scene scene1 = new Scene(parent);
+    Parent parent1 = FXMLLoader.load(getClass().getResource("gui/Seance1.fxml"));
+    Scene scene1 = new Scene(parent1);
     Scene scene = new Scene(root);
     primaryStage.setScene(scene1);
     primaryStage.setScene(scene);
