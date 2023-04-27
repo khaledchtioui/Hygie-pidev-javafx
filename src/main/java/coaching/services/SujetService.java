@@ -17,7 +17,6 @@ public class SujetService {
         connection = DataSource.getInstance().getCnx();
     }
 
-    //Afficher les sujets
     public List<Sujet> readAllSujets() {
         String requete = "select * from sujet";
         List<Sujet> sujetList = new ArrayList<>();

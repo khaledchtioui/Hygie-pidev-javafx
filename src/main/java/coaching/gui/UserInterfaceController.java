@@ -4,6 +4,7 @@ import coaching.entity.Reponsee;
 import coaching.entity.Sujet;
 import coaching.services.ReponseeService;
 import coaching.services.SujetService;
+import coaching.utils.Mail;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,12 +12,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
+
+import static coaching.utils.BadWords.chackwords;
 
 
 public class UserInterfaceController implements Initializable {
@@ -42,6 +46,7 @@ public class UserInterfaceController implements Initializable {
     @FXML
     public Button deleteReponsee;
 
+    int attention=0;
 
     @Override
     @FXML
@@ -70,7 +75,7 @@ public class UserInterfaceController implements Initializable {
 
     @FXML
 
-    public void ajouterReponse(ActionEvent event) {
+    public void ajouterReponse(ActionEvent event) throws IOException {
         if (sujetTableView.getSelectionModel().getSelectedItem() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur");
@@ -84,22 +89,36 @@ public class UserInterfaceController implements Initializable {
             alert.setContentText("La Réponse sur le sujet est Obligatoire");
             alert.showAndWait();
         } else {
-            int idSujet = sujetTableView.getSelectionModel().getSelectedItem().getId();
-            ReponseeService reponseeService = new ReponseeService();
-            Reponsee reponsee = new Reponsee();
-            reponsee.setSujet_id(idSujet);
-            reponsee.setContenu(reponseInput.getText());
-            reponsee.setDate(new Date(System.currentTimeMillis()));
-            reponseeService.insertReponsee(reponsee);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Ajout de Réponse ");
-            alert.setHeaderText("La réponse est bien ajoutée ");
-            alert.setContentText("OK!");
-            alert.showAndWait();
-            reponseInput.clear();
+            if (chackwords(reponseInput.getText()).equals("false")) {
+                int idSujet = sujetTableView.getSelectionModel().getSelectedItem().getId();
+                ReponseeService reponseeService = new ReponseeService();
+                Reponsee reponsee = new Reponsee();
+                reponsee.setSujet_id(idSujet);
+                reponsee.setContenu(reponseInput.getText());
+                reponsee.setDate(new Date(System.currentTimeMillis()));
+                reponseeService.insertReponsee(reponsee);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Ajout de Réponse ");
+                alert.setHeaderText("La réponse est bien ajoutée ");
+                alert.setContentText("OK!");
+                alert.showAndWait();
+                reponseInput.clear();
+            } else {
+                attention++;
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Warnning ");
+                alert.setHeaderText("Bad words");
+                alert.setContentText("Attention");
+                alert.showAndWait();
+
+                if(attention>2)
+                {
+                    System.out.println(attention);
+                    Mail.envoyer("chtioui","khaled","khaled.chtioui@esprit.tn");
+                }
+            }
         }
     }
-
     @FXML
     public void getselectedReponse() {
 

@@ -2,6 +2,7 @@
   <library name="controlsfx-11.1.2">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/../controlsfx-11.1.2.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/Compressed/wetransfer_lib_2023-04-25_1958/lib/javax.mail.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

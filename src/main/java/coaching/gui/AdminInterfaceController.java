@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-//C'est le controlleur de Espace Coach
 
 public class AdminInterfaceController implements Initializable {
 
@@ -115,9 +114,9 @@ public class AdminInterfaceController implements Initializable {
             alert.showAndWait();
         } else {
 
-            String titreSujet = titreInput.getText(); // uppp
-            String descriptionSujet = descriptionInput.getText(); //dowwn
-            int idSujet = sujetTableView.getSelectionModel().getSelectedItem().getId(); // id sujet sélécté
+            String titreSujet = titreInput.getText();
+            String descriptionSujet = descriptionInput.getText();
+            int idSujet = sujetTableView.getSelectionModel().getSelectedItem().getId();
             SujetService sujetService = new SujetService();
             Sujet sujetTrouvé = sujetService.retournerSujet(idSujet);
             Sujet sujet = new Sujet();

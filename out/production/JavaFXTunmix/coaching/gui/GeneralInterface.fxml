@@ -14,9 +14,9 @@
                 <Font size="15.0" />
             </font>
         </Button>
-        <Label layoutX="206.0" layoutY="24.0" prefHeight="74.0" prefWidth="245.0" style="-fx-font-family: Futara;" text="Coaching" textFill="WHITE" textOverrun="LEADING_WORD_ELLIPSIS" underline="true">
+        <Label layoutX="257.0" layoutY="24.0" prefHeight="74.0" prefWidth="224.0" style="-fx-font-family: Futara;" text="HYGIE" textAlignment="CENTER" textFill="WHITE" textOverrun="LEADING_WORD_ELLIPSIS" underline="true">
             <font>
-                <Font name="Bookman Old Style Italic" size="50.0" />
+                <Font name="Courier New Bold" size="50.0" />
             </font>
         </Label>
       <Button fx:id="ouvrirEspaceUserButton" layoutX="362.0" layoutY="178.0" mnemonicParsing="false" onAction="#espaceUser" prefHeight="74.0" prefWidth="178.0" text="Espace User" textFill="BLUE">
@@ -26,8 +26,13 @@
       </Button>
       <ImageView fitHeight="178.0" fitWidth="397.0" layoutX="109.0" layoutY="305.0">
          <image>
-            <Image url="@../../../../../../../../coach.jpg" />
+            <Image url="@../../../../../../../../../Downloads/coach.jpg" />
          </image>
       </ImageView>
+      <Label layoutX="150.0" layoutY="98.0" prefHeight="54.0" prefWidth="333.0" text="    coaching de vie" textFill="#fcfbfb">
+         <font>
+            <Font name="Comic Sans MS Italic" size="36.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>
