@@ -26,4 +26,9 @@ public class JavaFXCoaching extends Application {
         stage.setHeight(580);
     }
 
+    
+
 }
+
+
+

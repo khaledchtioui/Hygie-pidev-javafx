@@ -12,6 +12,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
@@ -21,6 +24,12 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 import static coaching.utils.BadWords.chackwords;
+
+
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
+import com.fasterxml.jackson.databind.JsonMappingException ;
 
 
 public class UserInterfaceController implements Initializable {
@@ -45,6 +54,9 @@ public class UserInterfaceController implements Initializable {
     public Button ajouterReponse;
     @FXML
     public Button deleteReponsee;
+
+    public static final String ACCOUNT_SID="AC46489cfdf5e1760860546f753dafcec0";
+    public static final String AUTH_TOKEN="e2a00a8a6c0a16748c12c82707b8bae7";
 
     int attention=0;
 
@@ -111,10 +123,12 @@ public class UserInterfaceController implements Initializable {
                 alert.setContentText("Attention");
                 alert.showAndWait();
 
-                if(attention>2)
+                if(attention>0)
                 {
                     System.out.println(attention);
-                    Mail.envoyer("chtioui","khaled","khaled.chtioui@esprit.tn");
+                    Mail.envoyer("wassim","bouassida","wassim.bouassida@esprit.tn");
+                    sendSms(52616964,"ATTENTION! la prochaine fois vous serez sanctionnez") ;
+
                 }
             }
         }
@@ -142,4 +156,27 @@ public class UserInterfaceController implements Initializable {
         alert.showAndWait();
     }
 
+
+    public void sendSms(int numero ,String reponse) {
+        try {
+
+            Twilio.init(ACCOUNT_SID,AUTH_TOKEN) ;
+            Message message = Message.creator(new PhoneNumber("+216"+numero),
+                    new PhoneNumber("+16206478408"),
+                    "\n \n alert "
+                            +reponse).create();
+
+            System.out.println("sms");
+//System.out.println(numero);
+
+        } catch (Exception e) {
+            System.out.println("Error SMS "+e);
+            Alert alert =new Alert(AlertType.INFORMATION) ;
+            alert.setTitle("Information Dialog");
+            alert.setHeaderText(null);
+            alert.setContentText("Réponse n'a pas été prise");
+            alert.showAndWait() ;
+            //return "Error "+e;
+        }
+    }
 }
