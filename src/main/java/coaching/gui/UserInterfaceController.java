@@ -9,12 +9,14 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
+import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
@@ -30,6 +32,8 @@ import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 import com.fasterxml.jackson.databind.JsonMappingException ;
+import javafx.scene.layout.HBox;
+import javafx.util.Callback;
 
 
 public class UserInterfaceController implements Initializable {
@@ -47,7 +51,13 @@ public class UserInterfaceController implements Initializable {
 
     @FXML
     public TableView<Reponsee> reponseTableView;
+    @FXML
+    private TableColumn<Reponsee, String> action;
+    @FXML
+    private TableColumn<Reponsee, Integer> nbdislike;
 
+    @FXML
+    private TableColumn<Reponsee, Integer> nblike;
     @FXML
     public TextArea reponseInput;
     @FXML
@@ -82,6 +92,74 @@ public class UserInterfaceController implements Initializable {
         ReponseeService reponseeService = new ReponseeService();
         List<Reponsee> reponseeList = reponseeService.readAssociatedReponses(idSujet);
         columnContenu.setCellValueFactory(new PropertyValueFactory<>("contenu"));
+        nblike.setCellValueFactory(new PropertyValueFactory<>("nblike"));
+        nbdislike.setCellValueFactory(new PropertyValueFactory<>("nbdislike"));
+
+
+        Callback<TableColumn<Reponsee, String>, TableCell<Reponsee, String>> cellFoctory;
+        cellFoctory = (TableColumn<Reponsee, String> param) -> {
+            // make cell containing buttons
+            final TableCell<Reponsee, String> cell = new TableCell<Reponsee, String>() {
+                @Override
+                public void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    //that cell created only on non-empty rows
+                    if (empty) {
+                        setGraphic(null);
+
+                    } else {
+
+                        Button like = new Button("like");
+                        Button dislike = new Button("dislike");
+
+                        like.setStyle(
+                                " -fx-cursor: hand ;"
+                                        + "-glyph-size:28px;"
+                                        + "-fx-fill:#ff1744;"
+                        );
+                        dislike.setStyle(
+                                " -fx-cursor: hand ;"
+                                        + "-glyph-size:28px;"
+                                        + "-fx-fill:#00E676;"
+                        );
+                        like.setOnMouseClicked((MouseEvent event) -> {
+
+
+                            Reponsee reposne = reponseTableView.getSelectionModel().getSelectedItem();
+                            System.out.println(reposne);
+                            //ReponseeService rs=new ReponseeService();
+                            int nblike = reponseeService.getnblike(reposne.getId());
+                            nblike++;
+                            reponseeService.setlike(reposne.getId(), nblike);
+
+                        });
+                        dislike.setOnMouseClicked((MouseEvent event) -> {
+
+
+                            Reponsee reponse = reponseTableView.getSelectionModel().getSelectedItem();
+                            ReponseeService rs = new ReponseeService();
+                            int nbdislike = rs.getnbdislike(reponse.getId());
+                                nbdislike++;
+                                rs.setdislike(reponse.getId(), nbdislike);
+                        });
+
+                        HBox managebtn = new HBox(like, dislike);
+                        managebtn.setStyle("-fx-alignment:center");
+                        HBox.setMargin(like, new Insets(2, 2, 0, 3));
+                        HBox.setMargin(dislike, new Insets(2, 3, 0, 2));
+
+                        setGraphic(managebtn);
+
+                    }
+                    setText(null);
+                }
+
+            };
+
+            return cell;
+        };
+
+        action.setCellFactory(cellFoctory);
         reponseTableView.setItems((FXCollections.observableArrayList(reponseeList)));
     }
 

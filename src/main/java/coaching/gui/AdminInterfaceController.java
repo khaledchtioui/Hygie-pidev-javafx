@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -48,7 +49,10 @@ public class AdminInterfaceController implements Initializable {
     public Button deleteSujetButton;
     @FXML
     public Button updateSujetButton;
-
+    @FXML
+    private TextField titrerech;
+    @FXML
+    private Button rechercher;
 
     @FXML
     public Button showAssociatedReponse;
@@ -177,5 +181,18 @@ public class AdminInterfaceController implements Initializable {
         newStage.toFront();
     }
 
+    @FXML
+    void rechercher(MouseEvent event) {
+    
+        if(titrerech.getText().isEmpty())
+        {
+            
+        }else {
+            List<Sujet> list;
 
+            SujetService sujetService = new SujetService();
+            list = sujetService.readAllSujetsytitreb(titrerech.getText());
+            sujetTableView.setItems((FXCollections.observableArrayList(list)));            
+        }
+    }
 }

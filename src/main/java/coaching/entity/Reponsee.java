@@ -10,8 +10,26 @@ public class Reponsee {
     private int sujet_id;
     private String contenu;
     private Date date;
+    private int nblike;
+    private int nbdislike;
 
     public Reponsee() {
+    }
+
+    public int getNblike() {
+        return nblike;
+    }
+
+    public void setNblike(int nblike) {
+        this.nblike = nblike;
+    }
+
+    public int getNbdislike() {
+        return nbdislike;
+    }
+
+    public void setNbdislike(int nbdislike) {
+        this.nbdislike = nbdislike;
     }
 
     public Reponsee(String contenu) {

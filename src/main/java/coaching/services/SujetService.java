@@ -101,5 +101,26 @@ public class SujetService {
         }
         return sujet;
     }
+    public List<Sujet> readAllSujetsytitreb(String titre) {
+        String requete = "select * from sujet where titre like '%"+titre+"%'";
+        List<Sujet> sujetList = new ArrayList<>();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(requete);
+            while (resultSet.next()) {
+                Sujet sujet = new Sujet();
+                sujet.setId(resultSet.getInt("id"));
+                sujet.setTitre(resultSet.getString("titre"));
+                sujet.setDescription(resultSet.getString("description"));
+                sujet.setDate(resultSet.getDate("date"));
+                sujet.setNbreponse(resultSet.getInt("nbreponse"));
+                sujet.setUser_id(resultSet.getInt("user_id"));
+                sujetList.add(sujet);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SujetService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return sujetList;
+    }
 
 }

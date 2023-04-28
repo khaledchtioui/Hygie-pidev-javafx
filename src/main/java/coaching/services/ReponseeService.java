@@ -29,6 +29,9 @@ public class ReponseeService {
                 reponsee.setId(resultSet.getInt("id"));
                 reponsee.setContenu(resultSet.getString("contenu"));
                 reponsee.setDate(resultSet.getDate("date"));
+                reponsee.setNblike(resultSet.getInt("nblike"));
+                reponsee.setNbdislike(resultSet.getInt("nbdislike"));
+
                 reponseeList.add(reponsee);
             }
         } catch (SQLException ex) {
@@ -77,5 +80,61 @@ public class ReponseeService {
             reponsee.setSujet_id(sujetId);
         }
         return reponsee;
+    }
+    public void setlike(int idreponse,int nb) {
+        try {
+            String req= "update reponsee set nblike=?  where id= ?";
+            PreparedStatement ps=connection.prepareStatement(req);
+            ps.setInt(1,nb);
+            ps.setInt(2,idreponse);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ReponseeService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public int getnblike(int id) {
+        int s=0;
+        try {
+
+            String req="select * from reponsee where id="+id;
+            Statement st=connection.createStatement();
+            ResultSet rs= st.executeQuery(req);
+            while(rs.next())
+            {
+                s = rs.getInt(6);
+            }
+
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ReponseeService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return s;
+    }
+    public void setdislike(int idreponse,int nb) {
+        try {
+            String req= "update reponsee set nbdislike=?  where id= ?";
+            PreparedStatement ps=connection.prepareStatement(req);
+            ps.setInt(1,nb);
+            ps.setInt(2,idreponse);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ReponseeService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public int getnbdislike(int id) {
+        int s=0;
+        try {
+
+            String req="select * from reponsee where id="+id;
+            Statement st=connection.createStatement();
+            ResultSet rs= st.executeQuery(req);
+            while(rs.next())
+            {
+                s = rs.getInt(7);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ReponseeService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return s;
     }
 }
