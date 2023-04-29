@@ -61,6 +61,10 @@ public class QuestionsController implements Initializable {
         this.q = q;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "QuestionsController{" + "id=" + id + ", q=" + q.getId() + '}';
@@ -112,38 +116,9 @@ private TableView<Map<String, Object>> tableView;
      */
              public void initialize(URL url, ResourceBundle rb) {
                  
-                 
-                  tableView.setOnMouseClicked(event -> {
-    if (event.getClickCount() == 1) { // Vérifier si c'est un clic simple
-        Map<String, Object> rowData = tableView.getSelectionModel().getSelectedItem();
-        if (rowData != null) {
-             id = (Integer) rowData.get("question_id");
-            String question =  (String) rowData.get("question_question")  ;
-            String type = (String) rowData.get("question_type")  ;
-          int point = (Integer) rowData.get("question_point");
-            System.out.println(question+type+point);
-            Questiontf.setText(question);
-            Point.setText(String.valueOf(point));
-            combotype.setValue(type);
-            
-         //  System.out.println("ID de la ligne sélectionnée : " + questionId);
-            // Faites quelque chose avec l'ID récupéré
-        }
-    }
-});
+      
 
-                 
-                   tableView.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) { // Detect double-click events
-                        Map<String, Object> rowData = tableView.getSelectionModel().getSelectedItem();
-             int xid = (Integer) rowData.get("question_id");
-
-                if (xid != 0) {
-                    // Open a new interface or window with the selected questionnaire data
-                    openNewInterface2(xid);
-                }
-            }
-        });
+               
     }    
 
             private void openNewInterface2(int id) {
@@ -162,7 +137,6 @@ private TableView<Map<String, Object>> tableView;
 
             // Get the controller
             ReponseController controller = loader.getController();
-
             // Set the ID value
             controller.setId(id);
             controller.afficher();
@@ -198,8 +172,44 @@ private TableView<Map<String, Object>> tableView;
 
         tableView.getColumns().addAll(questionQuestionColumn, questionTypeColumn, questionPointColumn);
  
-       
-
+      
+        
+         tableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+       Map<String, Object> rowData = tableView.getSelectionModel().getSelectedItem();
+        if (rowData != null) {
+             id = (Integer) rowData.get("question_id");
+             System.out.println("alooo"+id);
+            String question =  (String) rowData.get("question_question")  ;
+            String type = (String) rowData.get("question_type")  ;
+          int point = (Integer) rowData.get("question_point");
+            System.out.println(question+type+point);
+            Questiontf.setText(question);
+            Point.setText(String.valueOf(point));
+            combotype.setValue(type);
+            
+         //  System.out.println("ID de la ligne sélectionnée : " + questionId);
+            // Faites quelque chose avec l'ID récupéré
+        }
+            }
+        });
+        
+        
+             
+                
+        
+  
+                   tableView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) { // Detect double-click events
+                        Map<String, Object> rowData = tableView.getSelectionModel().getSelectedItem();
+             int xid = (Integer) rowData.get("question_id");
+                System.out.println("idddddd"+xid);
+                if (xid != 0) {
+                    // Open a new interface or window with the selected questionnaire data
+                    openNewInterface2(xid);
+                }
+            }
+        });
        
         
         

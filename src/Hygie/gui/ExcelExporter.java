@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Map;
 import javafx.stage.FileChooser;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -46,6 +49,8 @@ public static void exportToExcel() {
         cell.setCellValue(headers[i]);
     }
 
+
+    
     // Populate the data rows
     int rowNum = 1;
     for (Map<String, Object> row : dataList) {
@@ -58,6 +63,17 @@ public static void exportToExcel() {
         dataRow.createCell(5).setCellValue((int) row.get("question_point"));
         dataRow.createCell(6).setCellValue((String) row.get("reponse_text"));
     }
+    
+    
+    sheet.autoSizeColumn(0);
+    sheet.autoSizeColumn(1);
+    sheet.autoSizeColumn(2);
+    sheet.autoSizeColumn(3);
+    sheet.autoSizeColumn(4);
+    sheet.autoSizeColumn(5);
+    sheet.autoSizeColumn(6);
+
+
 
     // Prompt the user for a file save location
     FileChooser fileChooser = new FileChooser();

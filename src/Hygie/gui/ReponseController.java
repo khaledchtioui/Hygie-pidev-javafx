@@ -10,16 +10,22 @@ import hygie.entities.Questions;
 import hygie.entities.Reponse;
 import hygie.services.ServiceQuestion;
 import hygie.services.ServiceReponse;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -28,6 +34,17 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Window;
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.bouncycastle.crypto.agreement.srp.SRP6Util;
 
 /**
  * FXML Controller class
@@ -36,6 +53,8 @@ import javafx.scene.control.TextField;
  */
 public class ReponseController implements Initializable {
          private int id ;
+    @FXML
+    private Button excel;
 
     public void setId(int id) {
         this.id = id;
@@ -56,7 +75,6 @@ private TableView<Map<String, Object>> tableView;
         private String[] choix ={"True" ,"False"}   ;
         
 
-    @FXML
     private TextField Point;
     @FXML
     private ComboBox<String> combotype;
@@ -70,6 +88,7 @@ private TableView<Map<String, Object>> tableView;
     private TableColumn<Map<String, Object>, String> reponseColumn;
     @FXML
     private TableColumn<Map<String, Object>, String> TypeColumn;
+
 
     
     
@@ -88,10 +107,28 @@ private TableView<Map<String, Object>> tableView;
     }
     
     
-    
+            public void refrech() {
+                    tableView.getItems().clear();
+            combotype.getItems().addAll(choix);
+                    tableView.setItems(getData());
+    TableColumn<Map<String, Object>, Integer> IdColumn = new TableColumn<>("reponse ID");
+    IdColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty((Integer) cellData.getValue().get("reponseid")).asObject());
+
+
+        // Set up TableColumn cell value factories
+     
+        reponseColumn.setCellValueFactory(cellData -> new SimpleStringProperty((String) cellData.getValue().get("reponse")));
+
+      
+        TypeColumn.setCellValueFactory(cellData -> new SimpleStringProperty((String) cellData.getValue().get("type")));
+
+      tableView.getColumns().addAll(reponseColumn, TypeColumn);
+ 
+            }
+
     
         public void afficher() {
-            
+            tableView.getItems().clear();
             combotype.getItems().addAll(choix);
                     tableView.setItems(getData());
     TableColumn<Map<String, Object>, Integer> IdColumn = new TableColumn<>("reponse ID");
@@ -108,7 +145,85 @@ private TableView<Map<String, Object>> tableView;
       tableView.getColumns().addAll(reponseColumn, TypeColumn);
  
        
+      
+excel.setOnAction(new EventHandler<ActionEvent>() {
+    @Override public void handle(ActionEvent e) {
+        ServiceReponse rs = new ServiceReponse()  ;
+           FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Sélectionner un fichier Excel");
+        fileChooser.getExtensionFilters().addAll(
+            new ExtensionFilter("Fichiers Excel", "*.xlsx", "*.xls"),
+            new ExtensionFilter("Tous les fichiers", "*.*"));
+        Window stage = null;
+        File selectedFile = fileChooser.showOpenDialog(stage);   
+        if (selectedFile != null) {
+       
+                // Créer un objet Workbook pour représenter le fichier Excel
+                Workbook workbook = null;
+               try {
+                   workbook = WorkbookFactory.create(selectedFile);
+               } catch (IOException ex) {
+                   Logger.getLogger(ReponseController.class.getName()).log(Level.SEVERE, null, ex);
+               } catch (EncryptedDocumentException ex) {
+                   Logger.getLogger(ReponseController.class.getName()).log(Level.SEVERE, null, ex);
+               }
 
+                // Sélectionner la feuille de calcul à lire
+                Sheet sheet = workbook.getSheetAt(0);
+
+                // Ouvrir une connexion à la base de données SQLite
+              //  Connection conn = DriverManager.getConnection("jdbc:sqlite:donnees.db");
+
+                // Parcourir les lignes de la feuille de calcul
+                
+                for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+    Row row = sheet.getRow(i);
+    if (row != null) {
+  // Lire les valeurs des colonnes "titre" et "type"
+                    String titre = row.getCell(0).getStringCellValue();
+                     String type   ;
+                    if (row.getCell(1).getCellType() == CellType.STRING) {
+                     type = row.getCell(1).getStringCellValue();
+    } else if (row.getCell(1).getCellType() == CellType.NUMERIC) {
+        type = String.valueOf(row.getCell(1).getNumericCellValue());
+    } else {
+        // handle other cell types if needed
+        continue;
+    }
+                    
+                    
+                    
+                    System.out.println(type);
+                    
+                    System.out.println(titre);
+                     boolean x = false ; 
+                     x = type.equalsIgnoreCase("true") || type.equals("1.0");
+
+            
+       
+                rs.Ajouter(new Reponse(titre,x,new Questions(id)));
+             }
+}
+
+                
+                
+                    tableView.setItems(getData());
+                    clear();
+     
+              
+
+               try {
+                   // Fermer le fichier Excel, la connexion à la base de données et la boîte de dialogue
+                   workbook.close();
+               } catch (IOException ex) {
+                   Logger.getLogger(ReponseController.class.getName()).log(Level.SEVERE, null, ex);
+               }
+           
+        }
+    }
+});
+
+ 
        
         
         
@@ -140,8 +255,11 @@ private TableView<Map<String, Object>> tableView;
         alert.setHeaderText("La Reponse est bien supprimée ");
         alert.setContentText("OK!");
         alert.showAndWait();
-       clear();
                tableView.setItems(getData());
+               
+                    tableView.setItems(getData());
+                    clear();
+
 
       //  questionnaireTableView.setItems((FXCollections.observableArrayList(list)));
       //quiztf.clear();
@@ -181,7 +299,6 @@ private TableView<Map<String, Object>> tableView;
   //      questionnaireTableView.refresh();
     }
     
-       @FXML
        private void clear() {
                 
 reponsetf.clear();

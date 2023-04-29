@@ -4,17 +4,37 @@
  * and open the template in the editor.
  */
 package hygie.gui;
+import com.sun.jna.Native;
+import com.sun.jna.platform.win32.WinDef.*;
+import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.WinUser;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import org.controlsfx.control.Notifications;
+//
+
+import org.controlsfx.control.Notifications;
+//
 
 import hygie.entities.Questionnaire;
 import hygie.services.ServiceQuiz;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +43,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -61,37 +82,58 @@ public class QuizController implements Initializable {
     private Button ajouter;
 
 
-    private          ServiceQuiz questionnaireService =new ServiceQuiz() ;
+    private ServiceQuiz questionnaireService =new ServiceQuiz() ;
     @FXML
     private Button Delete;
     @FXML
     private Button generate;
     @FXML
     private TextField search;
+    @FXML
+    private ComboBox<String> combotri;  
+    private String[] choixx ={"Titre" ,"Date"}   ;
+
+    List<Questionnaire>   questionnaires22     ;
  
+    private   List<Questionnaire> questionnaires2     ;
+    
     
     
 
     /**
      * Initializes the controller class.
      */
+    
+    
+    
+    public void showNotification(String message) {
+    Label label = new Label(message);
+    Rectangle rectangle = new Rectangle(400, 50);
+    rectangle.setFill(Color.GREEN);
+
+    StackPane stackPane = new StackPane(rectangle, label);
+    stackPane.setAlignment(Pos.CENTER);
+
+    Notifications notifications = Notifications.create()
+            .hideAfter(Duration.seconds(6))
+            .position(Pos.BOTTOM_RIGHT)
+            .darkStyle()
+            .graphic(stackPane)
+            .title("Notification");
+
+    notifications.show();
+}
+    
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+                    combotri.getItems().addAll(choixx);
+
         
              ServiceQuiz rs =new ServiceQuiz() ;
       
-            
-        List<Questionnaire> questionnaires=rs.getAll() ;
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("Id"));
-        dateColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getDate()));
-        nomColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNom()));
       
-        // Populate the TableView with data
-        questionnaireTableView.getItems().addAll(questionnaires);
-        // TODO
-        
-        
          questionnaireTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                id=  Integer.valueOf(newValue.getId());
@@ -106,19 +148,141 @@ public class QuizController implements Initializable {
             if (event.getClickCount() == 2) { // Detect double-click events
                 Questionnaire selectedQuestionnaire = questionnaireTableView.getSelectionModel().getSelectedItem();
                 if (selectedQuestionnaire != null) {
-                    // Open a new interface or window with the selected questionnaire data
                     openNewInterface(selectedQuestionnaire,id);
                 }
             }
         });
+            
+            
+                             questionnaireTableView.getItems().clear();
+        questionnaires2=rs.getAll() ;
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        dateColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getDate()));
+        nomColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNom()));
+      
+        // Populate the TableView with data
+        questionnaireTableView.getItems().addAll(questionnaires2);
+        // TODO
+        
+        
+            
+            
+            search.textProperty().addListener((observable, oldValue, newValue) -> {
+                
+                    if (newValue == null || newValue.isEmpty()) {
+                       
+                        
+                             questionnaireTableView.getItems().clear();
+        List<Questionnaire> questionnaires1=rs.getAll() ;
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        dateColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getDate()));
+        nomColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNom()));
+      
+        questionnaireTableView.getItems().addAll(questionnaires1);
+        
+        
+
+                    }
+else
+                    {
+                   questionnaireTableView.getItems().clear();
+                questionnaires2=rs.getAllsearch(newValue);
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        dateColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getDate()));
+        nomColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNom()));
+      
+        questionnaireTableView.refresh();
+        questionnaireTableView.getItems().addAll(questionnaires2);
+                
+                    }
+                        
+              
+                
+                
+});    
+
+            combotri.setOnAction(e -> {
+    String choix = combotri.getValue();
+                trierDonnees(choix);
+    
+    
+    
+    
+    }
+    )    ;
+            
+   
+
          
         // TODO
     }    
+   
+    
+  
+    
+    public void trierDonnees(String choix) {
+    switch (choix) {
+      
+        case "Date":
+            Collections.sort(questionnaires2, new Comparator<Questionnaire>() {
+        @Override
+        public int compare(Questionnaire o1, Questionnaire o2) {
+
+   return o1.getDate().compareTo(o2.getDate())    ;
+
+        }
+    } );
+            break;
+        case "Titre":
+ Collections.sort(questionnaires2, new Comparator<Questionnaire>() {
+        @Override
+        public int compare(Questionnaire o1, Questionnaire o2) {
+
+   return o1.getNom().compareTo(o2.getNom())    ;
+
+        }
+    } );            break;
+        default:
+            
+ Collections.sort(questionnaires2, new Comparator<Questionnaire>() {
+        @Override
+        public int compare(Questionnaire o1, Questionnaire o2) {
+
+   return o1.getId()-o2.getId()    ;
+
+        }
+    } );            
+            
+            
+            
+            break;
+    }
+    
+    ServiceQuiz rs = new ServiceQuiz()  ;
+    
+    questionnaireTableView.getItems().clear();
+     questionnaires22=rs.getAll() ;
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        dateColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getDate()));
+        nomColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNom()));
+      
+        // Populate the TableView with data
+        questionnaireTableView.getItems().addAll(questionnaires2);
+       
+    
+    
+    
+}
+
+    
+    
+    
      @FXML
 
             public void handle(ActionEvent event) {
                 // Call the exportToExcel method to generate the Excel file
                ExcelExporter.exportToExcel();
+               
             }
     private void openNewInterface(Questionnaire questionnaire,int id) {
         
@@ -138,6 +302,7 @@ public class QuizController implements Initializable {
             QuestionsController controller = loader.getController();
 
             // Set the ID value
+            controller.setId(questionnaire.getId());
             controller.setQ(questionnaire);
             controller.afficher();
             System.out.println(controller);
@@ -215,11 +380,15 @@ questionnaireTableView.getItems().clear();
      @FXML
     private void handleGeneratePDF() {
         Stage stage = (Stage) generate.getScene().getWindow();
-        PDFGenerator.generatePDF(stage);
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("PDF Export");
-        alert.setHeaderText("PDF file created and saved successfully.");
-        alert.showAndWait();
+        PDFGenerator.generatePDF(stage,id);
+       // Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        //alert.setTitle("PDF Export");
+       // alert.setHeaderText("PDF file created and saved successfully.");
+     //   alert.showAndWait();
+        
+        
+//int flags = MB_OK | MB_ICONINFORMATION;
+//  User32.INSTANCE.MessageBox(null, message, title, flags);
     }
     
       @FXML

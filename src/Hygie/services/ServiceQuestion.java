@@ -53,7 +53,8 @@ public class ServiceQuestion implements QuizService<Questions>{
             ste.executeUpdate(req);
 
 
-        }  catch (SQLException ex) {
+        } 
+        catch (SQLException ex) {
             System.err.println("Questions exception");
             System.out.println(ex.getMessage());
         }
@@ -206,7 +207,26 @@ public class ServiceQuestion implements QuizService<Questions>{
 
     @Override
     public List<Questions> getAll() {
-        System.err.println("err");   return null;
-    }
+  ArrayList<Questions> pers = new ArrayList<>();
+        try {
+            ste =con.createStatement();
+            String req = "SELECT * FROM `Questions`";
+            ResultSet res =ste.executeQuery(req);
+
+            while(res.next()){
+                int id = res.getInt("id");
+                String nom = res.getString(2);
+              
+                
+    // Timestamp date = res.getTimestamp(4);
+
+
+
+                Questions p = new Questions(id);
+                pers.add(p);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } return pers ;}
 
 }

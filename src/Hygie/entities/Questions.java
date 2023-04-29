@@ -73,5 +73,13 @@ public class Questions {
         this.quizid = quizid;
     }
 
+    public Questions(int id, String question) {
+        this.id = id;
+        this.question = question;
+    }
+
+    //
+    
+    //
 
 }
