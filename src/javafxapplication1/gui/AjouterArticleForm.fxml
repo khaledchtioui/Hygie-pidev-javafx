@@ -4,20 +4,19 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.control.DatePicker?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1100.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxapplication1.gui.AjouterArticleFormController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxapplication1.gui.AjouterArticleFormController">
     <children>
-        <Label layoutX="25.0" layoutY="30.0" prefHeight="17.0" prefWidth="53.0" text="Titre:" />
-        <Label layoutX="25.0" layoutY="70.0" prefHeight="17.0" prefWidth="64.0" text="Catégorie:" />
-        <Label layoutX="25.0" layoutY="110.0" text="Description:" />
-        <Label layoutX="25.0" layoutY="180.0" text="Image:" />
-        <TextField fx:id="tftitle" layoutX="100.0" layoutY="25.0" promptText="Entrez le titre" />
-        <TextField fx:id="tfcategorie" layoutX="100.0" layoutY="65.0" promptText="Entrez la catégorie" />
-        <TextField fx:id="tfdescription" layoutX="100.0" layoutY="105.0" promptText="Entrez la description"  prefHeight="65.0" prefWidth="497.0" />
-        <TextField fx:id="tfimage" layoutX="100.0" layoutY="180.0" promptText="Entrez l'URL de l'image" />
-        <Button layoutX="100.0" layoutY="230.0" mnemonicParsing="false" onAction="#ajouterAction" text="Ajouter l'article" />
-        <Label fx:id="Listabel" layoutX="257.0" layoutY="50.0" prefHeight="101.0" prefWidth="189.0" />
+        <Label layoutX="48.0" layoutY="30.0" prefHeight="17.0" prefWidth="53.0" text="Titre:" />
+        <Label layoutX="46.0" layoutY="101.0" prefHeight="17.0" prefWidth="64.0" text="Catégorie:" />
+        <Label layoutX="43.0" layoutY="178.0" text="Description:" />
+        <Label layoutX="46.0" layoutY="456.0" text="Image:" />
+        <TextField fx:id="tftitle" layoutX="174.0" layoutY="26.0" prefHeight="25.0" prefWidth="497.0" promptText="Entrez le titre" />
+        <TextField fx:id="tfcategorie" layoutX="174.0" layoutY="97.0" prefHeight="25.0" prefWidth="497.0" promptText="Entrez la catégorie" />
+        <TextField fx:id="tfdescription" layoutX="174.0" layoutY="178.0" prefHeight="225.0" prefWidth="497.0" promptText="Entrez la description" />
+        <TextField fx:id="tfimage" layoutX="174.0" layoutY="452.0" prefHeight="25.0" prefWidth="497.0" promptText="Entrez l'URL de l'image" />
+        <Button layoutX="174.0" layoutY="510.0" mnemonicParsing="false" onAction="#ajouterAction" text="Ajouter l'article" />
+        <Label fx:id="Listabel" layoutX="257.0" layoutY="79.0" prefHeight="101.0" prefWidth="189.0" />
         
     </children>
 </AnchorPane>
