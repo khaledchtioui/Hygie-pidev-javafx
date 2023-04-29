@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="java">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../Downloads/PayPal-Java-SDK-master/rest-api-sample/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Downloads/PayPal-Java-SDK-master/rest-api-sdk/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Downloads/PayPal-Java-SDK-master/rest-api-sdk/src/test/java" />
+    </SOURCES>
+  </library>
+</component>

@@ -176,8 +176,8 @@ public class ServiceSeance implements IService<Seance>{
     }
 
 
-    public List<Seance> afficherSeancesReservees() throws SQLException {
-        List<Seance> seances = new ArrayList<>();
+    public ArrayList<Seance> afficherSeancesReservees() throws SQLException {
+        ArrayList<Seance> seances = new ArrayList<>();
         try {
             String query = "SELECT s.* FROM `hygie_app`.`seance` s INNER JOIN `hygie_app`.`reservation` r ON r.seance_id = s.id";
             PreparedStatement pst = con.prepareStatement(query);
@@ -235,10 +235,13 @@ public class ServiceSeance implements IService<Seance>{
     public List<Seance> rechercherSeance(String recherche) {
         List<Seance> seances = new ArrayList<>();
         try {
-            String query = "SELECT * FROM `hygie_app`.`seance` WHERE titre LIKE ? OR description LIKE ?";
+            String query = "SELECT * FROM `hygie_app`.`seance` WHERE titre LIKE ? OR description LIKE ? OR prix LIKE ? OR date LIKE ?";
             PreparedStatement pst = con.prepareStatement(query);
             pst.setString(1, "%" + recherche.trim() + "%");
             pst.setString(2, "%" + recherche.trim() + "%");
+            pst.setString(3, "%" + recherche.trim() + "%");
+            pst.setString(4, "%" + recherche.trim() + "%");
+
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Seance seance = new Seance();

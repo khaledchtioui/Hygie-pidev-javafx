@@ -1,0 +1,18 @@
+<component name="libraryTable">
+  <library name="java1">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../Downloads/JavaMoney-javamoney-lib-8e8fb52/calc/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Downloads/JavaMoney-javamoney-lib-8e8fb52/calc/src/test/java" />
+      <root url="file://$PROJECT_DIR$/../Downloads/JavaMoney-javamoney-lib-8e8fb52/exchange/exchange-rate-frb/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Downloads/JavaMoney-javamoney-lib-8e8fb52/exchange/exchange-rate-frb/src/main/jdk9" />
+      <root url="file://$PROJECT_DIR$/../Downloads/JavaMoney-javamoney-lib-8e8fb52/exchange/exchange-rate-frb/src/test/java" />
+      <root url="file://$PROJECT_DIR$/../Downloads/JavaMoney-javamoney-lib-8e8fb52/exchange/exchange-rate-yahoo/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Downloads/JavaMoney-javamoney-lib-8e8fb52/exchange/exchange-rate-yahoo/src/main/jdk9" />
+      <root url="file://$PROJECT_DIR$/../Downloads/JavaMoney-javamoney-lib-8e8fb52/exchange/exchange-rate-yahoo/src/test/java" />
+      <root url="file://$PROJECT_DIR$/../Downloads/JavaMoney-javamoney-lib-8e8fb52/javamoney-cdi/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Downloads/JavaMoney-javamoney-lib-8e8fb52/javamoney-cdi/src/test/java" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,5 +1,14 @@
 package seance_re.gui;
-
+import javax.money.CurrencyUnit;
+import javax.money.CurrencyUnit;
+import javax.money.Monetary;
+import javax.money.UnknownCurrencyException;
+import javax.money.convert.CurrencyConversion;
+import javax.money.convert.ExchangeRate;
+import javax.money.convert.MonetaryConversions;
+import javax.money.Monetary;
+import javax.money.UnknownCurrencyException;
+import javax.money.convert.ExchangeRate;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -20,9 +29,13 @@ import javax.money.MonetaryAmount;
 import javax.money.UnknownCurrencyException;
 import javax.money.convert.CurrencyConversion;
 import javax.money.convert.MonetaryConversions;
+import javax.money.spi.MonetaryCurrenciesSingletonSpi;
 import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.util.Base64;
+import java.util.Locale;
 
 public class CartitemController extends VBox {
     // Initialize the currencyComboBox
@@ -101,10 +114,44 @@ public class CartitemController extends VBox {
 
 // Set the event handler for the currencyComboBox
             currencyComboBox.setOnAction(event -> {
-                String selectedCurrency = currencyComboBox.getSelectionModel().getSelectedItem();
-                String convertedPrice = convertPrice(Float.toString(seance.getPrix()), selectedCurrency);
-                priceLabel.setText(convertedPrice);
+                // Get the selected currency code
+
+                // Définir une instance de CurrencyUnit pour EUR
+                CurrencyUnit eur = Monetary.getCurrency("USD");
+
+// Obtenir le code de devise sélectionné à partir de la liste déroulante
+                String selectedCurrencyCode = currencyComboBox.getSelectionModel().getSelectedItem();
+
+                try {
+                    // Définir une instance de CurrencyUnit pour la devise sélectionnée
+                    CurrencyUnit selectedCurrency = Monetary.getCurrency(selectedCurrencyCode);
+
+                    // Créer des objets MonetaryAmount avec des montants de 1 unité dans chaque devise
+                    MonetaryAmount oneEur = Monetary.getDefaultAmountFactory().setCurrency(eur).setNumber(1).create();
+                    MonetaryAmount oneSelectedCurrency = Monetary.getDefaultAmountFactory().setCurrency(selectedCurrency).setNumber(1).create();
+
+                    // Obtenir le taux de change entre les deux devises
+                    CurrencyConversion conversion = MonetaryConversions.getConversion(selectedCurrency);
+                    ExchangeRate exchangeRate = conversion.getExchangeRate(oneEur);
+                    // Get the number format for the selected currency
+                    NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.getDefault());
+
+// Convert the price to the selected currency and format it using the currency format
+                    BigDecimal convertedPrice = BigDecimal.valueOf(seance.getPrix()).multiply(exchangeRate.getFactor().numberValueExact(BigDecimal.class));
+                    String formattedPrice = currencyFormat.format(convertedPrice);
+
+// Set the formatted price on the label
+                    priceLabel.setText(formattedPrice);
+
+                } catch (UnknownCurrencyException e) {
+                    // Gérer l'exception si le code de devise sélectionné n'est pas reconnu
+                    priceLabel.setText("Erreur: devise inconnue");
+                }
+
+
             });
+
+
 
 // Initialize the price label with the converted price
             String initialPrice = String.format("%s EUR", seance.getPrix());
