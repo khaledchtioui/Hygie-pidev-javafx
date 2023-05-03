@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class MyDB {
-    String url = "jdbc:mysql://localhost:3306/hygie";
+    String url = "jdbc:mysql://localhost:3306/hygie_app";
     String user = "root";
     String pwd = "0000";
     Connection con;

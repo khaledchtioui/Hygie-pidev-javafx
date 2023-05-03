@@ -31,7 +31,7 @@ public class ServiceSeance implements IService<Seance>{
             }
             ste = con.createStatement();
             String imageData = getImageData(selectedFile);
-            String query = "INSERT INTO `hygie_app`.`seance`(titre, image, description, prix, date) VALUES (?, ?, ?, ?, ?)";
+            String query = "INSERT INTO seance (titre, image, description, prix, date) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement pst = con.prepareStatement(query);
 
             // assignation des valeurs aux paramètres de la requête
@@ -78,7 +78,7 @@ public class ServiceSeance implements IService<Seance>{
     public ArrayList<Seance> Afficher(){
         ArrayList<Seance> seances = new ArrayList<>();
         try {
-            String query = "SELECT * FROM `hygie_app`.`seance`";
+            String query = "SELECT * FROM seance";
             PreparedStatement pst = con.prepareStatement(query);
             ResultSet rs = pst.executeQuery();
             while (rs.next()){
@@ -100,7 +100,7 @@ public class ServiceSeance implements IService<Seance>{
     }
     public void supprimerSeance(Seance s) throws SQLException {
         try {
-            String query = "DELETE FROM `hygie_app`.`seance` WHERE id=?";
+            String query = "DELETE FROM seance WHERE id=?";
             PreparedStatement statement = con.prepareStatement(query);
             statement.setInt(1, s.getId());
             statement.executeUpdate();
@@ -111,7 +111,7 @@ public class ServiceSeance implements IService<Seance>{
     }
     public void modifierSeance(Seance seance) throws SQLException {
         try {
-            String query = "UPDATE `hygie_app`.`seance` SET titre=?, image=?, description=?, prix=?, date=? WHERE id=?";
+            String query = "UPDATE seance SET titre=?, image=?, description=?, prix=?, date=? WHERE id=?";
             PreparedStatement statement = con.prepareStatement(query);
 
             // assignation des valeurs aux paramètres de la requête
@@ -121,7 +121,7 @@ public class ServiceSeance implements IService<Seance>{
             String imageData = seance.getImage();
             if (imageData == null || imageData.isEmpty()) {
                 // retrieve existing image data from database
-                String query2 = "SELECT image FROM `hygie_app`.`seance` WHERE id=?";
+                String query2 = "SELECT image FROM seance WHERE id=?";
                 PreparedStatement statement2 = con.prepareStatement(query2);
                 statement2.setInt(1, seance.getId());
                 ResultSet rs = statement2.executeQuery();
@@ -179,7 +179,7 @@ public class ServiceSeance implements IService<Seance>{
     public ArrayList<Seance> afficherSeancesReservees() throws SQLException {
         ArrayList<Seance> seances = new ArrayList<>();
         try {
-            String query = "SELECT s.* FROM `hygie_app`.`seance` s INNER JOIN `hygie_app`.`reservation` r ON r.seance_id = s.id";
+            String query = "SELECT s.* FROM seance s INNER JOIN `hygie_app`.`reservation` r ON r.seance_id = s.id";
             PreparedStatement pst = con.prepareStatement(query);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
@@ -213,7 +213,7 @@ public class ServiceSeance implements IService<Seance>{
     public List<Seance> getAllSeances() throws SQLException {
         List<Seance> seances = new ArrayList<>();
         try {
-            String query = "SELECT * FROM `hygie_app`.`seance`";
+            String query = "SELECT * FROM seance";
             PreparedStatement pst = con.prepareStatement(query);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
@@ -235,7 +235,7 @@ public class ServiceSeance implements IService<Seance>{
     public List<Seance> rechercherSeance(String recherche) {
         List<Seance> seances = new ArrayList<>();
         try {
-            String query = "SELECT * FROM `hygie_app`.`seance` WHERE titre LIKE ? OR description LIKE ? OR prix LIKE ? OR date LIKE ?";
+            String query = "SELECT * FROM seance WHERE titre LIKE ? OR description LIKE ? OR prix LIKE ? OR date LIKE ?";
             PreparedStatement pst = con.prepareStatement(query);
             pst.setString(1, "%" + recherche.trim() + "%");
             pst.setString(2, "%" + recherche.trim() + "%");
@@ -247,6 +247,7 @@ public class ServiceSeance implements IService<Seance>{
                 Seance seance = new Seance();
                 seance.setTitre(rs.getString("titre"));
                 seance.setDescription(rs.getString("description"));
+                seance.setImage(rs.getString("image"));
                 seance.setPrix(rs.getFloat("prix"));
                 seance.setDate(rs.getDate("date"));
                 seances.add(seance);
@@ -260,7 +261,7 @@ public class ServiceSeance implements IService<Seance>{
     public List<Seance> trierSeancesParTitre() {
         List<Seance> seances = new ArrayList<>();
         try {
-            String query = "SELECT * FROM `hygie_app`.`seance` ORDER BY titre";
+            String query = "SELECT * FROM seance ORDER BY titre";
             PreparedStatement pst = con.prepareStatement(query);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
@@ -280,7 +281,7 @@ public class ServiceSeance implements IService<Seance>{
     public List<Seance> trierSeancesParDescription() {
         List<Seance> seances = new ArrayList<>();
         try {
-            String query = "SELECT * FROM `hygie_app`.`seance` ORDER BY description";
+            String query = "SELECT * FROM seance ORDER BY description";
             PreparedStatement pst = con.prepareStatement(query);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
@@ -300,7 +301,7 @@ public class ServiceSeance implements IService<Seance>{
     public List<Seance> trierSeancesParPrix() {
         List<Seance> seances = new ArrayList<>();
         try {
-            String query = "SELECT * FROM `hygie_app`.`seance` ORDER BY prix";
+            String query = "SELECT * FROM seance ORDER BY prix";
             PreparedStatement pst = con.prepareStatement(query);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
@@ -320,7 +321,7 @@ public class ServiceSeance implements IService<Seance>{
     public List<Seance> trierSeancesParDate() {
         List<Seance> seances = new ArrayList<>();
         try {
-            String query = "SELECT * FROM `hygie_app`.`seance` ORDER BY date";
+            String query = "SELECT * FROM seance ORDER BY date";
             PreparedStatement pst = con.prepareStatement(query);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {

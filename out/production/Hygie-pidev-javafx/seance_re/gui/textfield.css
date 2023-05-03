@@ -9,14 +9,7 @@
     -fx-text-fill: #000000;
 }
 
-.text-field:focused {
-    -fx-background-color: #FFFFFF;
-    -fx-text-fill: #000000;
-    -fx-border-color: #0088CC;
-    -fx-border-width: 2px;
-    -fx-border-radius: 0;
-    -fx-background-radius: 0;
-}
+
 
 .text-field:disabled {
     -fx-opacity: 0.6;

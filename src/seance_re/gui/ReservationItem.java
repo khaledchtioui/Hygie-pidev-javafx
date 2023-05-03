@@ -280,7 +280,7 @@ public class ReservationItem extends VBox {
 
         // Configurez les détails du paiement, tels que le montant, la devise et la description
         BigDecimal amount = BigDecimal.valueOf(seance.getPrix()).setScale(2, RoundingMode.HALF_UP);
-        Currency currency = Currency.getInstance("USD"); // Devise du paiement
+        Currency currency = Currency.getInstance("EUR"); // Devise du paiement
         String description = "Achat sur notre site web"; // Description du paiement
 
         // Créez une demande de paiement avec PayPalCheckoutSdk API

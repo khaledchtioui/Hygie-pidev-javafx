@@ -45,6 +45,8 @@ public class ResevationMain implements Initializable {
         // Récupération des séances depuis la base de données
 
         ArrayList<Seance> seances = null;
+
+
         try {
             seances = serviceSeance.afficherSeancesReservees();
         } catch (SQLException e) {
