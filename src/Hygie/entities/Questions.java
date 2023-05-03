@@ -1,20 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Hygie.entities;
+package hygie.entities;
 
-/**
- *
- * @author Khaled
- */
+
+
 public class Questions {
     private int id ;
     private String question ;
-    private int type ; 
+    private int type ;
     private int point   ;
-    private Questionnaire quizid ; 
+    private Questionnaire quizid ;
 
     public Questions(int id, String question, int type, int point, Questionnaire quizid) {
         this.id = id;
@@ -22,6 +15,10 @@ public class Questions {
         this.type = type;
         this.point = point;
         this.quizid = quizid;
+    }
+
+    public Questions(int id) {
+        this.id = id;
     }
 
     public Questions(String question, int type, int point, Questionnaire quizid) {
@@ -75,6 +72,14 @@ public class Questions {
     public void setQuizid(Questionnaire quizid) {
         this.quizid = quizid;
     }
+
+    public Questions(int id, String question) {
+        this.id = id;
+        this.question = question;
+    }
+
+    //
     
-    
+    //
+
 }
